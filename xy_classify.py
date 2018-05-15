@@ -210,7 +210,7 @@ if __name__ == "__main__":
     datadir = args.datadir
     embdir = args.embdir
     wordembs = args.wordembs
-    wordembs = args.desc
+    desc = args.desc
     embmeths = args.embmeths
 
     s = ''
