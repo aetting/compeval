@@ -308,6 +308,10 @@ def all_methods(task,setname,datadir,embdir,embd_methods,traintest=True):
 
 
 if __name__ == "__main__":
+    #currently you should do
+    # traintest=True and setname=neg to produce the neg embeddings
+    # traintest=False and setname=xy_pos for sr and other two-probe stuff
+    # traintest=False and setname=xy_neg for old neg and cont1?
     parser = argparse.ArgumentParser()
     parser.add_argument('task')
     parser.add_argument('setname')
