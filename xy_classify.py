@@ -218,7 +218,7 @@ if __name__ == "__main__":
     task = 'xy'
     if subtask in ('cont1','cont1simp'):
         setname = 'xy_neg'
-    elif subtask == 'neg':
+    elif subtask.split('_')[0] == 'neg':
         setname = 'neg'
     else:
         setname = 'xy_pos'
