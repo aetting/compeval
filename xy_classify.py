@@ -201,7 +201,6 @@ if __name__ == "__main__":
     parser.add_argument('datadir')
     parser.add_argument('embdir')
     parser.add_argument('wordembs')
-    parser.add_argument('desc')
     parser.add_argument('--embmeths',nargs='+')
     args = parser.parse_args()
 
@@ -210,7 +209,6 @@ if __name__ == "__main__":
     datadir = args.datadir
     embdir = args.embdir
     wordembs = args.wordembs
-    desc = args.desc
     embmeths = args.embmeths
 
     s = ''
@@ -225,7 +223,7 @@ if __name__ == "__main__":
     else:
         setname = 'xy_pos'
     sentpref = os.path.join(datadir,task,setname)
-    traintest = os.path.join(datadir,task,subtask+'-'+desc)
+    traintest = os.path.join(datadir,task,subtask)
 
     vocab = []
     with open(os.path.join(traintest,'vocab.txt')) as vocfile:
