@@ -316,7 +316,7 @@ if __name__ == "__main__":
     parser.add_argument('--embmeths',nargs='+')
     args = parser.parse_args()
 
-    all_methods(args.task,args.setname,args.datadir,args.embdir,args.embmeths,traintest=False)
+    all_methods(args.task,args.setname,args.datadir,args.embdir,args.embmeths,traintest=True)
 
 
 #     embd_main('/fs/clip-cognitive/composition/sets/profhelp_pos.txt','/fs/clip-cognitive/composition/sets/profhelppostestembs','infersent')
