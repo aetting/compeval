@@ -9,8 +9,6 @@ import ast
 import operator
 import argparse
 import numpy as np
-from gen_traintestfolds import read_set
-from classify_lreg import load_embdict
 from collections import Counter
 from sklearn import preprocessing
 from sklearn.linear_model import LogisticRegression
@@ -35,6 +33,45 @@ def load_word_embeddings(path, vocab):
     hndl.close()
     print('loaded embeddings file %s' % path)
     return embeddings
+
+def load_embdict(embfile):
+    embdict = {}
+    if embfile.endswith('.gz'):
+        file = gzip.open(embfile, 'rU')
+    else:
+        file = open(embfile, 'rU')
+    for line in file:
+        if line[0] == '{' or len(line.strip()) < 1: continue
+        id,sent,emb = line.strip().split('\t')
+        embdict[id] = (sent,emb)
+    file.close()
+    return embdict
+
+def read_set(setfilename,inds=[0,1,2,3]):
+    with open(setfilename) as setfile:
+        prevlinestart = None
+        linelists = []
+        linelist = None
+        for line in setfile.readlines():
+            if len(line.strip()) == 0 or line[0] == 'N': continue
+            if line[0] == '{' and line[0] != prevlinestart:
+                if linelist: linelists.append(linelist)
+                linelist = []
+            linelist.append(line.strip())
+            prevlinestart = line[0]
+        linelists.append(linelist)
+        sentdict = {}
+        for l in linelists:
+            l1 = l[inds[0]]
+            l2 = l[inds[1]]
+            l3 = l[inds[2]]
+            l4 = l[inds[3]]
+            sents = l[4:]
+            if l1 not in sentdict: sentdict[l1] = {}
+            if l2 not in sentdict[l1]: sentdict[l1][l2] = {}
+            if l3 not in sentdict[l1][l2]: sentdict[l1][l2][l3] = {}
+            sentdict[l1][l2][l3][l4] = sents
+    return sentdict
 
 def get_xyclass_ftrs(file_path,sentembdict,wordembdict,word2id):
     X_loc = []
