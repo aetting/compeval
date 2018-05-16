@@ -128,16 +128,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # parser.add_argument('traincats',type=int)
     # parser.add_argument('testcats',type=int)
-    parser.add_argument('splitt')
+    # parser.add_argument('splitt')
     parser.add_argument('datadir')
-    parser.add_argument('cltype')
+    # parser.add_argument('cltype')
     args = parser.parse_args()
 
     # traincats = args.traincats
     # testcats = args.testcats
-    splitname = args.splitt
+    # splitname = args.splitt
     datadir = args.datadir
-    cltype = args.cltype
+    # cltype = args.cltype
 
     ddxy = os.path.join(datadir,'xy')
 
