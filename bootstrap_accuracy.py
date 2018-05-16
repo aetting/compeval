@@ -1,3 +1,4 @@
+import numpy as np
 import re
 
 def read_results_file(filename):
@@ -13,21 +14,35 @@ def read_results_file(filename):
             if len(lsplit) < 2: continue
             corr = int(lsplit[3])
             corrlist.append(corr)
-    return corrlist
+    return np.array(corrlist)
 
 def bootstrap(orig_sample,num_samples):
     n = len(orig_sample)
-    # orig_acc = sum(orig_sample)/float(n)
-    # diffs = []
-    # for i in range(num_samples):
-    #     resample with replacement to get sample size n
-    #     acc = sum(sample)/float(n)
-    #     diff = acc - orig_acc
-    #     diffs.append(diff)
-    # sort diffs
-    # select diffs at 2.5 and 97.5 percentiles (or set up to actually calculate that) as endpoints
-    # return low_end,high_end
+    orig_acc = sum(orig_sample)/float(n)
+    diffs = []
+    for i in range(num_samples):
+        samp = orig_sample[np.random.randint(0,n,n)]
+        acc = sum(samp)/float(n)
+        diff = acc - orig_acc
+        # print(diff)
+        diffs.append(diff)
+    diffsort = sorted(diffs)
+    # print(diffsort)
+    lowind = int(round(.025*len(diffsort)))
+    highind = int(round(.975*len(diffsort)))
+    lowdiff = diffsort[lowind]
+    highdiff = diffsort[highind]
 
+    low = orig_acc + lowdiff
+    high = orig_acc + highdiff
+
+    return orig_acc,low,high
+
+def file2bootstrap(filename,num_samples):
+    corrlist = read_results_file(filename)
+    acc,low,high = bootstrap(corrlist,num_samples)
+
+    return acc,low,high
 
 # get size n of sample
 # resample with replacement to get new sample of size n
@@ -39,4 +54,6 @@ def bootstrap(orig_sample,num_samples):
 #take endpoints at appropriate percentiles (2.5 and 97.5)
 
 if __name__ == "__main__":
-    read_results_file('../dataset/loc_results.txt')
+    filename = '../dataset/loc_results.txt'
+    acc,low,high = file2bootstrap(filename,10000)
+    print('%s < %s < %s'%(low,acc,high))

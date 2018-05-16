@@ -1,6 +1,7 @@
 import os
 import re
 import argparse
+from bootstrap_accuracy import *
 
 # setdir = '/fs/clip-scratch/aetting/sets/'
 #setdir = '../sets/'
@@ -67,6 +68,9 @@ def get_all_xy(datadir):
                 for line in f:
                     rep.write(line)
                 f.close()
+                itemfile = os.path.join(resdir,meth,'loc_results.txt')
+                orig_acc,acclow,acchigh = file2bootstrap(itemfile,10000)
+                rep.write('\n%s < %s < %s'%(acclow,orig_acc,acchigh))
                 rep.write('\n\n\n')
     write_latex_table_xy(datadir,resdict)
 
