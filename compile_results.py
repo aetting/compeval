@@ -11,7 +11,7 @@ trainfolds = 4
 # tasks = ['hasprof','profhelp','profhelppat','neghelp']
 tasks=['cont1','cont2','order','sr','neg']
 
-emb_methods = ['bow','sdae','skipthoughts-uni','skipthoughts-bi','infersent','spinn']
+emb_methods = ['bow','sdae','skipthoughts-uni','skipthoughts-bi','infersent']
 #emb_methods = ['bow','sdae','skipthoughts-uni','infersent']
 # emb_methods = ['bow']
 
