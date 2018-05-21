@@ -56,9 +56,10 @@ def get_structures(task,needEvent,needList,avoidEvent,avoidList,lexvar_package,m
             for role in op:
                 if role in needsrc and op[role] not in needsrc[role]:
                     skip_op = True
-            for role in needEvent.participants:
-                if role not in op:
-                    skip_op = True
+            if needEvent:
+                for role in needEvent.participants:
+                    if role not in op:
+                        skip_op = True
             if skip_op:
                 continue
 #             for mainvoice in ['active','passive']:
@@ -241,30 +242,32 @@ def write_set(task,lab,task2inputs,mpo,setdir,lexvar_package,setID=None,outname=
         numsent = 0
         id2ev = {}
         needEventList,needList,avoidEvent,avoidList = [task2inputs[task][lab][v] for v in ['needEv','needList','avoidEv','avoidList']]
-        for needEvent in needEventList:
-            print('\nNext Event\n')
-            for ev,opNew,relrolesNew,insertionNew,insertvoiceNew, in get_structures(task,needEvent,needList,avoidEvent,avoidList,lexvar_package,max_per_op=mpo,nx=nx,dv=dv):
-                if opNew != op or relrolesNew != relroles or insertionNew != insertion or insertvoiceNew != insertvoice:
-                    op = opNew
-                    relroles = relrolesNew
-                    insertion = insertionNew
-                    insertvoice = insertvoiceNew
-                    out.write('\n' +str(op) + '\n' + str(relroles) + '\n' + '{%s}'%insertion + '\n' + '{%s}'%insertvoice)
-                    out.write('\n\n')
-                if ev:
-                    T = choose_rules(ev,gram,inflections)
-                    sent = ' '.join(T.leaves())
-                    print sent
-                    sentID = setID + str(numsent)
-                    out.write(sentID + '\t' + ' '.join(T.leaves()) + '\n')
-                    sentdict = ev.todict(inflections)
-                    # print(sentdict['surface'])
-                    # for part in ev.participants:
-                    #     if 'rc' in ev.participants[part].attributes:
-                    #         print(sentdict['participants'][part]['attributes']['rc']['event']['surface'])
-                    id2ev[sentID] = (sent,sentdict)
+        if needEventList and len(needEventList) > 1:
+            print('DEAL WITH THIS SITUATION')
+        else: needEvent = needEventList
+        for ev,opNew,relrolesNew,insertionNew,insertvoiceNew, in get_structures(task,needEvent,needList,avoidEvent,avoidList,lexvar_package,max_per_op=mpo,nx=nx,dv=dv):
+            if opNew != op or relrolesNew != relroles or insertionNew != insertion or insertvoiceNew != insertvoice:
+                op = opNew
+                relroles = relrolesNew
+                insertion = insertionNew
+                insertvoice = insertvoiceNew
+                out.write('\n' +str(op) + '\n' + str(relroles) + '\n' + '{%s}'%insertion + '\n' + '{%s}'%insertvoice)
+                out.write('\n\n')
+            if ev:
+                T = choose_rules(ev,gram,inflections)
+                sent = ' '.join(T.leaves())
+                print sent
+                sentID = setID + str(numsent)
+                out.write(sentID + '\t' + ' '.join(T.leaves()) + '\n')
+                sentdict = ev.todict(inflections)
+                # print(sentdict['surface'])
+                # for part in ev.participants:
+                #     if 'rc' in ev.participants[part].attributes:
+                #         print(sentdict['participants'][part]['attributes']['rc']['event']['surface'])
+                id2ev[sentID] = (sent,sentdict)
 #                     print id2ev[sentID]
-                    numsent += 1
+                numsent += 1
+
         out.write('\nNumber of sentences: %s\n'%str(numsent))
         with open(os.path.join(setdir,'%s-dicts.pkl'%(setID)),'w') as dictfile: pickle.dump(id2ev,dictfile,pickle.HIGHEST_PROTOCOL)
 

@@ -89,7 +89,7 @@ mainnegparc.participants['agent'].attributes['rc'] = {'rtype':None,'role':None,'
 task2inputs = {
 'xy': {
  'pos': {
-  'needEv': None,
+  'needEv': [],
   'needList': [],
   'avoidEv': None,
   'avoidList':[]
