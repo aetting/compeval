@@ -15,7 +15,7 @@ tenses = ['past','pres']
 # Ts = [available_verbs['transitive'][e] for e in permt]
 # Is = [available_verbs['intransitive'][e] for e in permi]
 
-permns = [1,2,3]
+permns = ['1','2','3']
 permts = ['a','b']
 permis = ['x','y','z']
 voices = ['c','d']
@@ -36,14 +36,8 @@ pols = ['j','k']
 #                 return notsafe
 
 def decode(num,listlengths):
-    # lt = len(permts)
-    # li = len(permis)
-    # lv = len(voices)
-    # ltn = len(tenses)
-    # la = len(aspects)
-    # lp = len(pols)
+
     inds = []
-    # inds.append(top_ind)
     for i,l in enumerate(listlengths):
         if i == 0:
             ind = num/np.prod(listlengths[1:])
@@ -53,34 +47,31 @@ def decode(num,listlengths):
         else:
             ind = (num%(np.prod(listlengths[i:])))/(np.prod(listlengths[i+1:]))
         inds.append(ind)
-    # permt_ind = (num%(lt*li*lv*ltn*la*lp))/(li*lv*ltn*la*lp)
-    # permi_ind = (num%(li*lv*ltn*la*lp))/(lv*ltn*la*lp)
-    # v_ind = (num%(lv*ltn*la*lp))/(ltn*la*lp)
-    # tns_ind = (num%(ltn*la*lp))/(la*lp)
-    # asp_ind = (num%(la*lp))/lp
-    # pol_ind = num%lp
     return inds
 
-def get_rand_prod(lists):
+def get_rand_prod(lists,maxnum):
     used = []
     listlengths = [len(l) for l in lists]
     numcombs = np.prod(listlengths)
     new = 0
-    for i in range(10):
+    for i in range(maxnum):
         while new == 0:
             num = np.random.randint(numcombs)
             if num not in used:
                 new = 1
-        n,tr,il,vc,tn,asp,pol = decode(num,listlengths)
-        s2 = '%s %s %s %s %s %s %s --> %s'%(permns[n],permts[tr],permis[il],voices[vc],tenses[tn],aspects[asp],pols[pol],num)
-        print(s2)
+        inds = decode(num,listlengths)
+        listitems = [lists[i2][ind2] for i2,ind2 in enumerate(inds)]
+        # s2 = ' '.join(listitems) + ' --> %s'%num
         used.append(num)
         new = 0
+        yield listitems
 
 
 if __name__ == "__main__":
     lists = [permns,permts,permis,voices,tenses,aspects,pols]
-    get_rand_prod(lists)
+    # listlengths = [len(l) for l in lists]
+    for permn,permt,permi,voice,aspect,tense,pol in get_rand_prod(lists,5):
+
 
 
     # ind = 0
@@ -92,7 +83,7 @@ if __name__ == "__main__":
     #                     for a in aspects:
     #                         for p in pols:
     #                             s1 = '%s %s %s %s %s %s %s --> %s'%(i,ii,iii,v,t,a,p,ind)
-    #                             n,tr,il,vc,tn,asp,pol = decode(ind,listlengths)
-    #                             s2 = '%s %s %s %s %s %s %s --> %s'%(permns[n],permts[tr],permis[il],voices[vc],tenses[tn],aspects[asp],pols[pol],ind)
+    #                             inds = decode(ind,listlengths)
+    #                             s2 = ' '.join([str(lists[i2][ind2]) for i2,ind2 in enumerate(inds)]) + ' --> %s'%ind
     #                             if s1 != s2: print('%s %s'%(s1,s2))
     #                             ind += 1

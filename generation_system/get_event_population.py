@@ -41,12 +41,13 @@ def populate_event(event_orig,lexvar_package,nx=False,dv=False):
     permts = list(itertools.permutations(range(len(available_verbs['transitive'])),r = tv))
     permis = list(itertools.permutations(range(len(available_verbs['intransitive'])),r = iv))
 
-    allperms = list(itertools.product(permns,permts,permis,avail_voices,avail_aspects,avail_tenses,avail_pols))
-    for l in permns,permts,permis:
-        l = None
-    random.shuffle(allperms)
+    # allperms = list(itertools.product(permns,permts,permis,avail_voices,avail_aspects,avail_tenses,avail_pols))
+    # for l in permns,permts,permis:
+    #     l = None
+    # random.shuffle(allperms)
 
-    for permn,permt,permi,voice,aspect,tense,pol in allperms:
+    # for permn,permt,permi,voice,aspect,tense,pol in allperms:
+    for permn,permt,permi,voice,aspect,tense,pol in get_rand_prod([permns,permts,permis,avail_voices,avail_aspects,avail_tenses,avail_pols]):
         Ns = [available_nouns[e] for e in permn]
         Ts = [available_verbs['transitive'][e] for e in permt]
         Is = [available_verbs['intransitive'][e] for e in permi]
@@ -64,6 +65,37 @@ def populate_event(event_orig,lexvar_package,nx=False,dv=False):
         event_full = fill_details(event_inter,nxlist,nx=nx,dv=dv)
 #                                 print (' '.join(Ns+Ts+Is+[aspect,pol,tense,voice]))
         yield(event_full)
+
+def decode(num,listlengths):
+
+    inds = []
+    for i,l in enumerate(listlengths):
+        if i == 0:
+            ind = num/np.prod(listlengths[1:])
+            # permn_ind = num/(lt*li*lv*ltn*la*lp)
+        elif i == len(listlengths) - 1:
+            ind = num%listlengths[-1]
+        else:
+            ind = (num%(np.prod(listlengths[i:])))/(np.prod(listlengths[i+1:]))
+        inds.append(ind)
+    return inds
+
+def get_rand_prod(lists):
+    used = []
+    listlengths = [len(l) for l in lists]
+    numcombs = np.prod(listlengths)
+    new = 0
+    for i in range(numcombs):
+        while new == 0:
+            num = np.random.randint(numcombs)
+            if num not in used:
+                new = 1
+        inds = decode(num,listlengths)
+        listitems = [lists[i2][ind2] for i2,ind2 in enumerate(inds)]
+        # s2 = ' '.join(listitems) + ' --> %s'%num
+        used.append(num)
+        new = 0
+        yield listitems
 
 
 #loop through identified open slots and designated fillers, and insert

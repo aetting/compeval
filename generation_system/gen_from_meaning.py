@@ -52,6 +52,7 @@ def get_structures(task,needEvent,needList,avoidEvent,avoidList,lexvar_package,m
         #iterate over options within this frame
         for op in role_rc_structures[f]:
             skip_op = False
+            print('\n')
             print(op)
             for role in op:
                 if role in needsrc and op[role] not in needsrc[role]:
@@ -256,7 +257,7 @@ def write_set(task,lab,task2inputs,mpo,setdir,lexvar_package,setID=None,outname=
             if ev:
                 T = choose_rules(ev,gram,inflections)
                 sent = ' '.join(T.leaves())
-                print sent
+                print(sent)
                 sentID = setID + str(numsent)
                 out.write(sentID + '\t' + ' '.join(T.leaves()) + '\n')
                 sentdict = ev.todict(inflections)
