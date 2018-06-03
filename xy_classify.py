@@ -155,7 +155,7 @@ def xy_classify(train_X,train_y,test_X,test_y,report_f,test_ids,test_sents,test_
         # print("Training and tuning MLP\n")
         # f1_average = 'micro'
         hidden_layer_sizes =(train_X.shape[1],train_X.shape[1],train_X.shape[1])
-        clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes,activation='relu',max_iter=700)
+        clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes,activation='relu',max_iter=1200)
 
     clf.fit(train_X, train_y)
 
