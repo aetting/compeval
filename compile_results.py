@@ -9,10 +9,11 @@ from bootstrap_accuracy import *
 trainfolds = 4
 
 # tasks = ['hasprof','profhelp','profhelppat','neghelp']
-tasks={'cont1':'Content1Probe','cont2':'Content2probe','order':'Order','sr':'SemRole','neg':'Negation'}
+# tasks={'cont1':'Content1Probe','cont2':'Content2probe','order':'Order','sr':'SemRole','neg':'Negation'}
+tasks = ['sr','sr_2lyer','sr_3lyr','neg','neg_2lyr','neg_3lyr']
 
 emb_methods = ['bow','sdae','skipthoughts-uni','skipthoughts-bi','infersent']
-plotnames = ['BOW','SDAE','ST-U','ST-B','INF']
+
 #emb_methods = ['bow','sdae','skipthoughts-uni','infersent']
 # emb_methods = ['bow']
 
@@ -78,23 +79,6 @@ def get_all_xy(datadir):
                 rep.write('\n\n\n')
         cif.close()
     write_latex_table_xy(datadir,resdict)
-
-def plot_cis(olhlist,task,resdir):
-    # olhlist = ((3.3,3.0,3.6),(3.2,2.8,3.5),(3.3,3.0,3.6),(3.2,2.8,3.5),(3.3,3.0,3.6))
-    pts = [o for o,_,_ in olhlist]
-    low = [o-l for o,l,_ in olhlist]
-    high = [h-o for o,_,h in olhlist]
-    x = range(1,len(pts)+1)
-    plt.scatter(x,pts,c='green',s=50,marker='_',linewidths=2)
-    plt.errorbar(x,pts,yerr=np.array([low,high]),ecolor='black',linewidth=1,fmt='none')
-    # plt.xlim(0,len(diffs)+1)
-    # plt.ylim(ymin=-.02)
-    plt.xticks(tuple(x),plotnames)
-    plt.xlabel("Embedding method")
-    plt.ylabel("Accuracy")
-    plt.title('%s accuracies'%tasks[task])
-    plt.savefig(os.path.join(resdir,'%s-cis.png'%task),format='png')
-    plt.clf()
 
 
 def write_latex_table(outdir,resdict):
