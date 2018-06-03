@@ -61,7 +61,8 @@ def get_all_xy(datadir):
         resdir = os.path.join(datadir,task)
         resdict[task] = {}
         taskreport = os.path.join(resdir,'allreport.txt')
-        olhlist = []
+        cifile = os.path.join(resdir,'cilist.txt')
+        cif = open(cifile,'w')
         with open(taskreport,'w') as rep:
             for meth in emb_methods:
                 rep.write('MODEL: ' + meth.upper() + '\n\n')
@@ -73,10 +74,10 @@ def get_all_xy(datadir):
                 f.close()
                 itemfile = os.path.join(resdir,meth,'loc_results.txt')
                 orig_acc,acclow,acchigh = file2bootstrap(itemfile,10000)
-                olhlist.append((orig_acc,acclow,acchigh))
+                cif.write('%s\t%s,%s,%s\n'%(meth,orig_acc,acclow,acchigh))
                 rep.write('\n\nCONFIDENCE INTERVALS (LOCALIST)\n\n%s < %s < %s\n'%(acclow,orig_acc,acchigh))
                 rep.write('\n\n\n')
-            plot_cis(olhlist,task,resdir)
+        cif.close()
     write_latex_table_xy(datadir,resdict)
 
 def plot_cis(olhlist,task,resdir):
