@@ -10,7 +10,7 @@ trainfolds = 4
 
 # tasks = ['hasprof','profhelp','profhelppat','neghelp']
 # tasks={'cont1':'Content1Probe','cont2':'Content2probe','order':'Order','sr':'SemRole','neg':'Negation'}
-tasks = ['sr','sr_2lyer','sr_3lyr','neg','neg_2lyr','neg_3lyr']
+tasks = ['sr','sr_2lyr','sr_3lyr','neg','neg_2lyr','neg_3lyr']
 
 emb_methods = ['bow','sdae','skipthoughts-uni','skipthoughts-bi','infersent']
 
