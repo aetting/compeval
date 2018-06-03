@@ -2,7 +2,6 @@ import os
 import re
 import argparse
 from bootstrap_accuracy import *
-import matplotlib.pyplot as plt
 
 # setdir = '/fs/clip-scratch/aetting/sets/'
 #setdir = '../sets/'
