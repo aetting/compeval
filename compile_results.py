@@ -2,6 +2,7 @@ import os
 import re
 import argparse
 from bootstrap_accuracy import *
+import matplotlib.pyplot as plt
 
 # setdir = '/fs/clip-scratch/aetting/sets/'
 #setdir = '../sets/'
@@ -9,9 +10,10 @@ from bootstrap_accuracy import *
 trainfolds = 4
 
 # tasks = ['hasprof','profhelp','profhelppat','neghelp']
-tasks=['cont1','cont2','order','sr','neg']
+tasks={'cont1':'Content1Probe','cont2':'Content2probe','order':'Order','sr':'SemRole','neg':'Negation'}
 
 emb_methods = ['bow','sdae','skipthoughts-uni','skipthoughts-bi','infersent']
+plotnames = ['BOW','SDAE','ST-U','ST-B','INF']
 #emb_methods = ['bow','sdae','skipthoughts-uni','infersent']
 # emb_methods = ['bow']
 
@@ -59,6 +61,7 @@ def get_all_xy(datadir):
         resdir = os.path.join(datadir,task)
         resdict[task] = {}
         taskreport = os.path.join(resdir,'allreport.txt')
+        olhlist = []
         with open(taskreport,'w') as rep:
             for meth in emb_methods:
                 rep.write('MODEL: ' + meth.upper() + '\n\n')
@@ -70,9 +73,29 @@ def get_all_xy(datadir):
                 f.close()
                 itemfile = os.path.join(resdir,meth,'loc_results.txt')
                 orig_acc,acclow,acchigh = file2bootstrap(itemfile,10000)
+                olhlist.append((orig_acc,acclow,acchigh))
                 rep.write('\n\nCONFIDENCE INTERVALS (LOCALIST)\n\n%s < %s < %s\n'%(acclow,orig_acc,acchigh))
                 rep.write('\n\n\n')
+            plot_cis(olhlist,task,resdir)
     write_latex_table_xy(datadir,resdict)
+
+def plot_cis(olhlist,task,resdir):
+    # olhlist = ((3.3,3.0,3.6),(3.2,2.8,3.5),(3.3,3.0,3.6),(3.2,2.8,3.5),(3.3,3.0,3.6))
+    pts = [o for o,_,_ in olhlist]
+    low = [o-l for o,l,_ in olhlist]
+    high = [h-o for o,_,h in olhlist]
+    x = range(1,len(pts)+1)
+    plt.scatter(x,pts,c='green',s=50,marker='_',linewidths=2)
+    plt.errorbar(x,pts,yerr=np.array([low,high]),ecolor='black',linewidth=1,fmt='none')
+    # plt.xlim(0,len(diffs)+1)
+    # plt.ylim(ymin=-.02)
+    plt.xticks(tuple(x),plotnames)
+    plt.xlabel("Embedding method")
+    plt.ylabel("Accuracy")
+    plt.title('%s accuracies'%tasks[task])
+    plt.savefig(os.path.join(resdir,'%s-cis.png'%task),format='png')
+    plt.clf()
+
 
 def write_latex_table(outdir,resdict):
     file = os.path.join(outdir,'%s-textable-%s.tex')

@@ -6,6 +6,45 @@ from nltk.sem.logic import Variable
 # from dataset_lexvars import *
 from dataset_dicts import *
 
+def populate_check(avoidEvent,needList,event,max_per_op,num_this_op,lexvar_package,nx=False,dv=False):
+    yielded = 0
+    nouns,verbs,inflections,nxlist = lexvar_package
+    for ev2 in populate_event(event,lexvar_package,nx=nx,dv=dv):
+        # if outer_loop_iter > 2 and yielded == 0: break
+        safe = 1
+        if avoidEvent:
+            for avEv in avoidEvent:
+                if not ev2.check_event_to_avoid(avEv):
+                    safe = 0
+#                     print('DID NOT PASS')
+        if safe:
+            num_this_op += 1
+            yielded += 1
+            yield(ev2,num_this_op)
+        if max_per_op and (num_this_op >= max_per_op):
+            break
+
+def populate_check_wadd(avoidEvent,needList,event,max_per_op,num_this_op,lexvar_package,nx=False,dv=False):
+    fullstop=False
+    _,verbs,_,_ = lexvar_package
+    for ev in add_mandatory_words(needList,event,verbs):
+        yielded = 0
+        for ev2 in populate_event(ev,lexvar_package,nx=nx,dv=dv):
+            # if outer_loop_iter > 2 and yielded == 0:
+                # break
+            safe = 1
+            if avoidEvent:
+                for avEv in avoidEvent:
+                    if not ev2.check_event_to_avoid(avEv): safe = 0
+            if safe:
+                num_this_op += 1
+                yielded += 1
+                yield(ev2,num_this_op)
+            if max_per_op and (num_this_op >= max_per_op):
+                fullstop = True
+                break
+        if fullstop: break
+
 #takes partially filled input event structure and iterates through available nouns and verbs to fill remaining slots
 def populate_event(event_orig,lexvar_package,nx=False,dv=False):
     #currently set so only one event is output for each original input frame (max_evs)
@@ -244,44 +283,6 @@ def sync_rc_hostrole(event):
                 event.participants[part].name = rcevent.participants[chosen_role].name
     return event
 
-def populate_check_wadd(avoidEvent,needList,event,max_per_op,num_this_op,lexvar_package,nx=False,dv=False):
-    fullstop=False
-    _,verbs,_,_ = lexvar_package
-    for ev in add_mandatory_words(needList,event,verbs):
-        yielded = 0
-        for ev2 in populate_event(ev,lexvar_package,nx=nx,dv=dv):
-            # if outer_loop_iter > 2 and yielded == 0:
-                # break
-            safe = 1
-            if avoidEvent:
-                for avEv in avoidEvent:
-                    if not ev2.check_event_to_avoid(avEv): safe = 0
-            if safe:
-                num_this_op += 1
-                yielded += 1
-                yield(ev2,num_this_op)
-            if max_per_op and (num_this_op >= max_per_op):
-                fullstop = True
-                break
-        if fullstop: break
-
-def populate_check(avoidEvent,needList,event,max_per_op,num_this_op,lexvar_package,nx=False,dv=False):
-    yielded = 0
-    nouns,verbs,inflections,nxlist = lexvar_package
-    for ev2 in populate_event(event,lexvar_package,nx=nx,dv=dv):
-        # if outer_loop_iter > 2 and yielded == 0: break
-        safe = 1
-        if avoidEvent:
-            for avEv in avoidEvent:
-                if not ev2.check_event_to_avoid(avEv):
-                    safe = 0
-#                     print('DID NOT PASS')
-        if safe:
-            num_this_op += 1
-            yielded += 1
-            yield(ev2,num_this_op)
-        if max_per_op and (num_this_op >= max_per_op):
-            break
 
 def add_mandatory_words(mand_words,event_orig,verbs):
     used_participants,used_events,parts_to_fill,events_to_fill = take_inventory(event_orig,verbs)
