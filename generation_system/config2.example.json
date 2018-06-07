@@ -20,11 +20,15 @@
     },
 
     "needList": {
-      "noun" : ["child"]
+      "noun" : ["child"],
+      "transitive" : [],
+      "intransitve" : []
       },
 
     "avoidList": {
-      "noun" : ["doctor"]
+      "noun" : ["doctor"],
+      "transitive" : [],
+      "intransitve" : []
     }
  },
 

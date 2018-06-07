@@ -2,16 +2,16 @@
  "constraints" : {
 
     "needEv": {
-      "tense":"past",
-      "pol":"pos",
-      "frame":"transitive",
+      "tense" : "past",
+      "pol" : "pos",
+      "frame" : "transitive",
       "participants": {
         "patient": {
           "attributes" : {
             "rc": {
               "event" : {
-                "name":"sleep",
-                "aspect":"prog"
+                "name" : "sleep",
+                "aspect" : "prog"
               }
             }
 

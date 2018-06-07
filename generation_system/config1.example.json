@@ -1,9 +1,9 @@
 {
  "constraints" : {
-    "needEv": null,
-    "needList": {},
-    "avoidEv": null,
-    "avoidList": {}
+    "needEv" : null,
+    "needList" : {},
+    "avoidEv" : null,
+    "avoidList" : {}
  },
 
  "role_rc_structures" : {
