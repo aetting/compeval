@@ -193,6 +193,17 @@ def finish_role_branches(event):
             event.participants[role] = characterStart()
     return event
 
+def load_lexvars(lexvarfile):
+    with open(lexvarfile, 'rU') as f:
+        lexvars = json.load(f)
+        nouns = lexvars['nouns']
+        verbs = lexvars['verbs']
+        frames = lexvars['frames']
+        inflections = lexvars['inflections']
+        nxlist = lexvars['nxlist']
+
+    return nouns,verbs,frames,inflections
+
 
 def choose_rules(event,fixed_grammar_string,inflections):
     #choose rules with right frame for verb
@@ -274,6 +285,10 @@ def write_set(task,lab,task2inputs,mpo,setdir,lexvar_package,setID=None,outname=
 
 if __name__ == "__main__":
     gram = import_grammar('grammar_feature')
+
+    nouns,verbs,frames,inflections,nxlist = load_lexvars('dataset_lexvars.json')
+
+
     print("""------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------""")
 

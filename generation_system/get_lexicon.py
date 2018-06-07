@@ -1,20 +1,15 @@
 import sys
 import os
+import json
+import gzip
 
 
 #get lexical vars for generation system from XTAG
-morphdir = '.'
-vocabfile = 'lexicon.txt'
-def get_inflections(morphdir):
+def get_inflections():
     inflections = {}
     nouns = []
-#     inpt = sys.argv[1]
-#     out = sys.argv[2]
 
-    f = open(os.path.join(morphdir,'morph_english.flat'), 'rU')
-#     line = f.readline()
-#     while (line[0] == ';'):
-#         line = f.readline()
+    f = gzip.open('lexical/morph_english.flat.gz', 'rU')
 
     all_inflections = {}
     noun_inflections = {}
@@ -25,14 +20,6 @@ def get_inflections(morphdir):
         inflct = entry[0].rstrip()
         main_lemma = entry[2].rstrip()
         pts_of_spch = entry[3:]
-
-#         for i in range(len(entry)):
-#             if i == 0:
-#                 inflct = entry[i].rstrip()
-#             if i == 2:
-#                 main_lemma = entry[i].rstrip()
-#             if i > 2:
-#                 pts_of_spch.append(entry[i])
 
         prog_lemmas = []
         for i in range(len(pts_of_spch)):
@@ -90,37 +77,32 @@ def get_inflections(morphdir):
 
     return all_inflections,noun_inflections
 
-def read_vocab(vocabfile):
+def get_lemmas():
     # read input file
-    temp_nouns = {} # for temporarily holding nouns
-    trans = {} # temporary dictionaries to remove verbs with not full inflections
-    intrans = {}
-    nouns_order = []
+    nouns = [] # for temporarily holding nouns
+    trans = [] # temporary dictionaries to remove verbs with not full inflections
+    intrans = []
+    adverbs = None
 
-    with open(vocabfile, 'rU') as f:
-        for line in f:
-            cat = line.rstrip().split(' | ')
-            if cat[0] == 'intransitive':
-                words = cat[1].split(',')
-                for word in words:
-                    intrans[word.strip()] = ''
-            if cat[0] == 'transitive':
-                words = cat[1].split(',')
-                for word in words:
-                    trans[word.strip()] = ''
-            if cat[0] == 'noun':
-                words = cat[1].split(',')
-                for word in words:
-                    nouns_order.append(word.strip())
-                    temp_nouns[word.strip()] = ''
+    with open('lexical/vocabulary.json', 'rU') as f:
+        vocabdict = json.load(f)
+        for word in vocabdict['intransitive']:
+            intrans.append(word.strip())
+        for word in vocabdict['transitive']:
+            trans.append(word.strip())
+        for word in vocabdict['noun']:
+            nouns.append(word.strip())
+        if 'adverbs' in vocabdict:
+            adverbs = [word.strip() for word in vocabdict['adverbs']]
 
-    return temp_nouns,trans,intrans,nouns_order
+    return nouns,trans,intrans,adverbs
 
-def other(morphvars,vocabvars,out='test.py'):
-    # if pastpart is the same as past tense version, just copy it over
-    all_inflections,noun_inflections = morphvars
-    temp_nouns,trans,intrans,nouns_order = vocabvars
-    remove = []
+def compile_vocab(out):
+    all_inflections,noun_inflections = get_inflections()
+    nouns,trans,intrans,adverbs = get_lemmas()
+
+    lexvars = {}
+    remove = {'intrans':[],'trans':[],'noun':[]}
     verbs = {'transitive':[],'intransitive':[]}
     frames = {}
 
@@ -146,31 +128,36 @@ def other(morphvars,vocabvars,out='test.py'):
     for v in trans:
         if v in all_inflections:
             v_inflct[v] = all_inflections[v]
+        else:
+            remove['trans'].append(v)
 
     for v in intrans:
         if v in all_inflections:
             v_inflct[v] = all_inflections[v]
+        else:
+            remove['intrans'].append(v)
 
-    for n in temp_nouns:
+    for n in nouns:
         if n in noun_inflections:
             n_inflct[n] = noun_inflections[n]
-
-    errors = '# The following lemmas were not added to data structures: '
+        else:
+            remove['noun'].append(n)
 
     for l in v_inflct:
         if ('tensed' not in v_inflct[l]) or ('pastpart' not in v_inflct[l]) or ('prespart' not in v_inflct[l]) or (('tensed' in v_inflct[l]) and (('pressg' not in v_inflct[l]['tensed']) or ('prespl' not in v_inflct[l]['tensed']) or ('past' not in v_inflct[l]['tensed']))):
-            remove.append(l)
             if l in trans:
-                trans.pop(l, None)
+                remove['trans'].append(l)
             if l in intrans:
-                intrans.pop(l, None)
-            errors += '\n# ' + l
+                remove['intrans'].append(l)
 
     for l in n_inflct:
         if ('sg' not in n_inflct[l]) or ('pl' not in n_inflct[l]):
-            remove.append(l)
-            temp_nouns.pop(l, None)
-            errors += '\n# ' + l
+            remove['noun'].append(l)
+
+    #remove from lists
+    trans = [l for l in trans if l not in remove['trans']]
+    intrans = [l for l in intrans if l not in remove['intrans']]
+    nouns = [l for l in nouns if l not in remove['noun']]
 
     # remove from inflct
     for l in remove:
@@ -179,19 +166,6 @@ def other(morphvars,vocabvars,out='test.py'):
         if l in n_inflct:
             n_inflct.pop(l, None)
 
-    # fix random errors
-    for l in n_inflct:
-        if n_inflct[l]['sg'] != l:
-            n_inflct[l]['sg'] = l
-        if l == 'machine':
-            n_inflct[l]['pl'] = 'machines'
-        if l == 'peacock':
-            n_inflct[l]['pl'] = 'peacocks'
-        if l == 'giraffe':
-            n_inflct[l]['pl'] = 'giraffes'
-        if l == 'ostrich':
-            n_inflct[l]['pl'] = 'ostriches'
-
     # build data structures
     for v in trans:
         verbs['transitive'].append(v)
@@ -199,10 +173,6 @@ def other(morphvars,vocabvars,out='test.py'):
     for v in intrans:
         verbs['intransitive'].append(v)
 
-    # for n in temp_nouns:
-    #    nouns.append(n)
-
-    nouns = [n for n in nouns_order if n in temp_nouns]
 
     for i in verbs:
         for v in verbs[i]:
@@ -211,30 +181,22 @@ def other(morphvars,vocabvars,out='test.py'):
     inflections = dict(v_inflct)
     inflections.update(n_inflct)
 
+    lexvars['verbs'] = verbs
+    lexvars['nouns'] = nouns
+    lexvars['frames'] = frames
+    lexvars['inflections'] = inflections
+    lexvars['nxlist'] = adverbs
+
     with open(out, 'w') as output:
-#     sys.stdout = output
+        json.dump(lexvars,output,indent=1)
 
-        output.write('nouns = %s\n\n'%nouns)
-        output.write('verbs = %s\n\n'%verbs)
-        output.write('frames = %s\n\n'%frames)
-        output.write('inflections = %s\n\n'%inflections)
+    remove_all = remove['trans']+remove['intrans']+remove['noun']
+    if len(remove_all) > 0:
+        print('\n# The following lemmas were removed:\n%s\n'%'\n'.join(remove_all))
 
-    print(errors)
-
-    warnings = '# The following entries may be incorrect: '
-    for n in n_inflct:
-        if not n_inflct[n]['pl'].endswith('s') or n_inflct[n]['pl'].endswith('es'):
-            warnings += '\n# lemma: ' + n + ' pl: ' + n_inflct[n]['pl']
-
-    print(warnings)
 
     return nouns,verbs,frames,inflections
 
 if __name__ == "__main__":
 
-    morphvars = get_inflections(morphdir)
-    vocabvars = read_vocab(vocabfile)
-    other(morphvars,vocabvars)
-#     nouns,verbs,frames,inflections = main()
-#     print nouns
-#     print inflections
+    compile_vocab('dataset_lexvars.json')

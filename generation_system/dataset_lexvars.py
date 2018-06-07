@@ -1,47 +1,330 @@
-# nouns = ['professor', 'student', 'man', 'woman', 'president', 'child', 'girl', 'boy', 'judge', 'senator', 'secretary', 'doctor', 'lawyer', 'scientist', 'banker', 'assistant', 'officer', 'climber', 'butcher', 'songwriter', 'singer', 'attorney', 'passenger', 'chair', 'civilian', 'fisherman', 'watcher', 'interviewer', 'mailman', 'watchman', 'roommate', 'refugee', 'aunt', 'bodyguard', 'client', 'trainer', 'guy', 'handyman', 'teacher', 'dictator', 'reviewer', 'immigrant', 'speaker', 'physicist', 'editor', 'father', 'drummer', 'researcher', 'grandmother', 'farmer', 'pilot', 'participant', 'director', 'libertarian', 'fireman', 'guest', 'instructor', 'survivor', 'recruiter', 'doorman', 'sister', 'physician', 'receptionist', 'veteran', 'husband', 'astronomer', 'cardiologist', 'soldier', 'repairman', 'housewife', 'youngster', 'activist', 'businessman', 'resident', 'accountant', 'visitor', 'prince', 'surgeon', 'programmer', 'citizen', 'housekeeper', 'baker', 'granddaughter', 'librarian', 'grandfather', 'chairman', 'musician', 'member']
-# verbs = {'intransitive': ['dance', 'run', 'shout', 'sleep', 'resign'], 'transitive': ['hit', 'help', 'love', 'support', 'watch', 'like', 'contact', 'call', 'observe', 'recommend', 'follow', 'advise', 'believe', 'hate', 'avoid', 'meet']}
-# frames = {'follow': 'transitive', 'run': 'intransitive', 'help': 'transitive', 'love': 'transitive', 'call': 'transitive', 'dance': 'intransitive', 'support': 'transitive', 'watch': 'transitive', 'resign': 'intransitive', 'shout': 'intransitive', 'contact': 'transitive', 'sleep': 'intransitive', 'meet': 'transitive', 'observe': 'transitive', 'recommend': 'transitive', 'hit': 'transitive', 'advise': 'transitive', 'believe': 'transitive', 'hate': 'transitive', 'avoid': 'transitive', 'like': 'transitive'}
-# inflections = {'trainer': {'sg': 'trainer', 'pl': 'trainers'}, 'watcher': {'sg': 'watcher', 'pl': 'watchers'}, 'love': {'tensed': {'past': 'loved', 'prespl': 'love', 'pressg': 'loves'}, 'pastpart': 'loved', 'prespart': 'loving'}, 'help': {'tensed': {'prespl': 'help', 'past': 'helped', 'pressg': 'helps'}, 'pastpart': 'helped', 'prespart': 'helping'}, 'dance': {'tensed': {'prespl': 'dance', 'past': 'danced', 'pressg': 'dances'}, 'pastpart': 'danced', 'prespart': 'dancing'}, 'visitor': {'sg': 'visitor', 'pl': 'visitors'}, 'scientist': {'sg': 'scientist', 'pl': 'scientists'}, 'sleep': {'tensed': {'past': 'slept', 'prespl': 'sleep', 'pressg': 'sleeps'}, 'pastpart': 'slept', 'prespart': 'sleeping'}, 'librarian': {'sg': 'librarian', 'pl': 'librarians'}, 'follow': {'tensed': {'prespl': 'follow', 'past': 'followed', 'pressg': 'follows'}, 'pastpart': 'followed', 'prespart': 'following'}, 'chair': {'sg': 'chair', 'pl': 'chairs'}, 'hate': {'tensed': {'past': 'hated', 'prespl': 'hate', 'pressg': 'hates'}, 'pastpart': 'hated', 'prespart': 'hating'}, 'prince': {'sg': 'prince', 'pl': 'princes'}, 'member': {'sg': 'member', 'pl': 'members'}, 'interviewer': {'sg': 'interviewer', 'pl': 'interviewers'}, 'mailman': {'sg': 'mailman', 'pl': 'mailmen'}, 'guest': {'sg': 'guest', 'pl': 'guests'}, 'support': {'tensed': {'past': 'supported', 'prespl': 'support', 'pressg': 'supports'}, 'pastpart': 'supported', 'prespart': 'supporting'}, 'father': {'sg': 'father', 'pl': 'fathers'}, 'accountant': {'sg': 'accountant', 'pl': 'accountants'}, 'housewife': {'sg': 'housewife', 'pl': 'housewives'}, 'watchman': {'sg': 'watchman', 'pl': 'watchmen'}, 'researcher': {'sg': 'researcher', 'pl': 'researchers'}, 'shout': {'tensed': {'prespl': 'shout', 'past': 'shouted', 'pressg': 'shouts'}, 'pastpart': 'shouted', 'prespart': 'shouting'}, 'drummer': {'sg': 'drummer', 'pl': 'drummers'}, 'call': {'tensed': {'prespl': 'call', 'past': 'called', 'pressg': 'calls'}, 'pastpart': 'called', 'prespart': 'calling'}, 'youngster': {'sg': 'youngster', 'pl': 'youngsters'}, 'recommend': {'tensed': {'prespl': 'recommend', 'past': 'recommended', 'pressg': 'recommends'}, 'pastpart': 'recommended', 'prespart': 'recommending'}, 'dictator': {'sg': 'dictator', 'pl': 'dictators'}, 'editor': {'sg': 'editor', 'pl': 'editors'}, 'woman': {'sg': 'woman', 'pl': 'women'}, 'hit': {'tensed': {'past': 'hit', 'prespl': 'hit', 'pressg': 'hits'}, 'pastpart': 'hit', 'prespart': 'hitting'}, 'citizen': {'sg': 'citizen', 'pl': 'citizens'}, 'civilian': {'sg': 'civilian', 'pl': 'civilians'}, 'songwriter': {'sg': 'songwriter', 'pl': 'songwriters'}, 'assistant': {'sg': 'assistant', 'pl': 'assistants'}, 'farmer': {'sg': 'farmer', 'pl': 'farmers'}, 'watch': {'tensed': {'prespl': 'watch', 'past': 'watched', 'pressg': 'watches'}, 'pastpart': 'watched', 'prespart': 'watching'}, 'singer': {'sg': 'singer', 'pl': 'singers'}, 'veteran': {'sg': 'veteran', 'pl': 'veterans'}, 'roommate': {'sg': 'roommate', 'pl': 'roommates'}, 'observe': {'tensed': {'prespl': 'observe', 'past': 'observed', 'pressg': 'observes'}, 'pastpart': 'observed', 'prespart': 'observing'}, 'child': {'sg': 'child', 'pl': 'children'}, 'judge': {'sg': 'judge', 'pl': 'judges'}, 'surgeon': {'sg': 'surgeon', 'pl': 'surgeons'}, 'believe': {'tensed': {'past': 'believed', 'prespl': 'believe', 'pressg': 'believes'}, 'pastpart': 'believed', 'prespart': 'believing'}, 'pilot': {'sg': 'pilot', 'pl': 'pilots'}, 'physician': {'sg': 'physician', 'pl': 'physicians'}, 'bodyguard': {'sg': 'bodyguard', 'pl': 'bodyguards'}, 'like': {'tensed': {'prespl': 'like', 'past': 'liked', 'pressg': 'likes'}, 'pastpart': 'liked', 'prespart': 'liking'}, 'housekeeper': {'sg': 'housekeeper', 'pl': 'housekeepers'}, 'grandfather': {'sg': 'grandfather', 'pl': 'grandfathers'}, 'fisherman': {'sg': 'fisherman', 'pl': 'fishermen'}, 'officer': {'sg': 'officer', 'pl': 'officers'}, 'meet': {'tensed': {'past': 'met', 'prespl': 'meet', 'pressg': 'meets'}, 'pastpart': 'met', 'prespart': 'meeting'}, 'guy': {'sg': 'guy', 'pl': 'guys'}, 'repairman': {'sg': 'repairman', 'pl': 'repairmen'}, 'baker': {'sg': 'baker', 'pl': 'bakers'}, 'husband': {'sg': 'husband', 'pl': 'husbands'}, 'secretary': {'sg': 'secretary', 'pl': 'secretaries'}, 'passenger': {'sg': 'passenger', 'pl': 'passengers'}, 'attorney': {'sg': 'attorney', 'pl': 'attorneys'}, 'resident': {'sg': 'resident', 'pl': 'residents'}, 'immigrant': {'sg': 'immigrant', 'pl': 'immigrants'}, 'professor': {'sg': 'professor', 'pl': 'professors'}, 'astronomer': {'sg': 'astronomer', 'pl': 'astronomers'}, 'receptionist': {'sg': 'receptionist', 'pl': 'receptionists'}, 'lawyer': {'sg': 'lawyer', 'pl': 'lawyers'}, 'reviewer': {'sg': 'reviewer', 'pl': 'reviewers'}, 'libertarian': {'sg': 'libertarian', 'pl': 'libertarians'}, 'girl': {'sg': 'girl', 'pl': 'girls'}, 'doorman': {'sg': 'doorman', 'pl': 'doormen'}, 'programmer': {'sg': 'programmer', 'pl': 'programmers'}, 'participant': {'sg': 'participant', 'pl': 'participants'}, 'doctor': {'sg': 'doctor', 'pl': 'doctors'}, 'avoid': {'tensed': {'past': 'avoided', 'prespl': 'avoid', 'pressg': 'avoids'}, 'pastpart': 'avoided', 'prespart': 'avoiding'}, 'butcher': {'sg': 'butcher', 'pl': 'butchers'}, 'client': {'sg': 'client', 'pl': 'clients'}, 'grandmother': {'sg': 'grandmother', 'pl': 'grandmothers'}, 'activist': {'sg': 'activist', 'pl': 'activists'}, 'speaker': {'sg': 'speaker', 'pl': 'speakers'}, 'chairman': {'sg': 'chairman', 'pl': 'chairmen'}, 'advise': {'tensed': {'prespl': 'advise', 'past': 'advised', 'pressg': 'advises'}, 'pastpart': 'advised', 'prespart': 'advising'}, 'musician': {'sg': 'musician', 'pl': 'musicians'}, 'run': {'tensed': {'prespl': 'run', 'past': 'ran', 'pressg': 'runs'}, 'pastpart': 'run', 'prespart': 'running'}, 'fireman': {'sg': 'fireman', 'pl': 'firemen'}, 'granddaughter': {'sg': 'granddaughter', 'pl': 'granddaughters'}, 'handyman': {'sg': 'handyman', 'pl': 'handymen'}, 'physicist': {'sg': 'physicist', 'pl': 'physicists'}, 'resign': {'tensed': {'past': 'resigned', 'prespl': 'resign', 'pressg': 'resigns'}, 'pastpart': 'resigned', 'prespart': 'resigning'}, 'director': {'sg': 'director', 'pl': 'directors'}, 'student': {'sg': 'student', 'pl': 'students'}, 'businessman': {'sg': 'businessman', 'pl': 'businessmen'}, 'president': {'sg': 'president', 'pl': 'presidents'}, 'teacher': {'sg': 'teacher', 'pl': 'teachers'}, 'cardiologist': {'sg': 'cardiologist', 'pl': 'cardiologists'}, 'man': {'sg': 'man', 'pl': 'men'}, 'instructor': {'sg': 'instructor', 'pl': 'instructors'}, 'boy': {'sg': 'boy', 'pl': 'boys'}, 'sister': {'sg': 'sister', 'pl': 'sisters'}, 'survivor': {'sg': 'survivor', 'pl': 'survivors'}, 'refugee': {'sg': 'refugee', 'pl': 'refugees'}, 'recruiter': {'sg': 'recruiter', 'pl': 'recruiters'}, 'soldier': {'sg': 'soldier', 'pl': 'soldiers'}, 'contact': {'tensed': {'prespl': 'contact', 'past': 'contacted', 'pressg': 'contacts'}, 'pastpart': 'contacted', 'prespart': 'contacting'}, 'aunt': {'sg': 'aunt', 'pl': 'aunts'}, 'banker': {'sg': 'banker', 'pl': 'bankers'}, 'senator': {'sg': 'senator', 'pl': 'senators'}, 'climber': {'sg': 'climber', 'pl': 'climbers'}}
-
-# nouns = ['professor', 'student', 'woman', 'man', 'doctor', 'scientist']
-#
-# verbs = {'intransitive': ['dance', 'sleep'], 'transitive': ['call', 'help']}
-#
-# frames = {'dance': 'intransitive', 'call': 'transitive', 'sleep': 'intransitive', 'help': 'transitive'}
-#
-# inflections = {'woman': {'sg': 'woman', 'pl': 'women'}, 'help': {'tensed': {'prespl': 'help', 'past': 'helped', 'pressg': 'helps'}, 'pastpart': 'helped', 'prespart': 'helping'}, 'doctor': {'sg': 'doctor', 'pl': 'doctors'}, 'dance': {'tensed': {'prespl': 'dance', 'past': 'danced', 'pressg': 'dances'}, 'pastpart': 'danced', 'prespart': 'dancing'}, 'professor': {'sg': 'professor', 'pl': 'professors'}, 'scientist': {'sg': 'scientist', 'pl': 'scientists'}, 'call': {'tensed': {'prespl': 'call', 'past': 'called', 'pressg': 'calls'}, 'pastpart': 'called', 'prespart': 'calling'}, 'student': {'sg': 'student', 'pl': 'students'}, 'sleep': {'tensed': {'past': 'slept', 'prespl': 'sleep', 'pressg': 'sleeps'}, 'pastpart': 'slept', 'prespart': 'sleeping'}, 'man': {'sg': 'man', 'pl': 'men'}}
-
-nouns = ['professor', 'student', 'woman', 'man', 'doctor', 'scientist', 'lawyer']
-
-verbs = {'intransitive': ['dance', 'sleep'], 'transitive': ['follow', 'recommend', 'call', 'help', 'meet']}
-
-frames = {'help': 'transitive', 'call': 'transitive', 'dance': 'intransitive', 'sleep': 'intransitive', 'recommend': 'transitive', 'follow': 'transitive', 'meet': 'transitive'}
-
-inflections = {'woman': {'sg': 'woman', 'pl': 'women'}, 'help': {'tensed': {'prespl': 'help', 'past': 'helped', 'pressg': 'helps'}, 'pastpart': 'helped', 'prespart': 'helping'}, 'doctor': {'sg': 'doctor', 'pl': 'doctors'}, 'dance': {'tensed': {'prespl': 'dance', 'past': 'danced', 'pressg': 'dances'}, 'pastpart': 'danced', 'prespart': 'dancing'}, 'professor': {'sg': 'professor', 'pl': 'professors'}, 'student': {'sg': 'student', 'pl': 'students'}, 'scientist': {'sg': 'scientist', 'pl': 'scientists'}, 'call': {'tensed': {'prespl': 'call', 'past': 'called', 'pressg': 'calls'}, 'pastpart': 'called', 'prespart': 'calling'}, 'lawyer': {'sg': 'lawyer', 'pl': 'lawyers'}, 'recommend': {'tensed': {'prespl': 'recommend', 'past': 'recommended', 'pressg': 'recommends'}, 'pastpart': 'recommended', 'prespart': 'recommending'}, 'follow': {'tensed': {'prespl': 'follow', 'past': 'followed', 'pressg': 'follows'}, 'pastpart': 'followed', 'prespart': 'following'}, 'man': {'sg': 'man', 'pl': 'men'}, 'sleep': {'tensed': {'past': 'slept', 'prespl': 'sleep', 'pressg': 'sleeps'}, 'pastpart': 'slept', 'prespart': 'sleeping'}, 'meet': {'tensed': {'past': 'met', 'prespl': 'meet', 'pressg': 'meets'}, 'pastpart': 'met', 'prespart': 'meeting'}}
-
-
-# nxlist = ['at all','really','remotely','by any means','exactly','particularly']
-
-# nxlist = ['really', 'actually', 'fully', 'truly', 'surely', 'precisely', 'absolutely','totally','entirely','completely']
-nxlist = ['really', 'actually', 'fully', 'absolutely','totally','entirely','completely','quickly','clearly','always','often']
-
-# The following lemmas were not added to data structures:
-# The following entries may be incorrect:
-# lemma: prince pl: princes
-# lemma: housewife pl: housewives
-# lemma: woman pl: women
-# lemma: roommate pl: roommates
-# lemma: judge pl: judges
-# lemma: fisherman pl: fishermen
-# lemma: secretary pl: secretaries
-# lemma: handyman pl: handymen
-# lemma: refugee pl: refugees
-# lemma: mailman pl: mailmen
-# lemma: watchman pl: watchmen
-# lemma: child pl: children
-# lemma: repairman pl: repairmen
-# lemma: doorman pl: doormen
-# lemma: chairman pl: chairmen
-# lemma: fireman pl: firemen
-# lemma: man pl: men
-# lemma: businessman pl: businessmen
+{
+ "frames": {
+  "advise": "transitive", 
+  "avoid": "transitive", 
+  "believe": "transitive", 
+  "call": "transitive", 
+  "contact": "transitive", 
+  "dance": "intransitive", 
+  "follow": "transitive", 
+  "hate": "transitive", 
+  "help": "transitive", 
+  "hit": "transitive", 
+  "like": "transitive", 
+  "love": "transitive", 
+  "meet": "transitive", 
+  "observe": "transitive", 
+  "recommend": "transitive", 
+  "resign": "intransitive", 
+  "run": "intransitive", 
+  "shout": "intransitive", 
+  "sleep": "intransitive", 
+  "support": "transitive", 
+  "watch": "transitive"
+ }, 
+ "inflections": {
+  "advise": {
+   "pastpart": "advised", 
+   "prespart": "advising", 
+   "tensed": {
+    "past": "advised", 
+    "prespl": "advise", 
+    "pressg": "advises"
+   }
+  }, 
+  "assistant": {
+   "pl": "assistants", 
+   "sg": "assistant"
+  }, 
+  "avoid": {
+   "pastpart": "avoided", 
+   "prespart": "avoiding", 
+   "tensed": {
+    "past": "avoided", 
+    "prespl": "avoid", 
+    "pressg": "avoids"
+   }
+  }, 
+  "banker": {
+   "pl": "bankers", 
+   "sg": "banker"
+  }, 
+  "believe": {
+   "pastpart": "believed", 
+   "prespart": "believing", 
+   "tensed": {
+    "past": "believed", 
+    "prespl": "believe", 
+    "pressg": "believes"
+   }
+  }, 
+  "boy": {
+   "pl": "boys", 
+   "sg": "boy"
+  }, 
+  "call": {
+   "pastpart": "called", 
+   "prespart": "calling", 
+   "tensed": {
+    "past": "called", 
+    "prespl": "call", 
+    "pressg": "calls"
+   }
+  }, 
+  "child": {
+   "pl": "children", 
+   "sg": "child"
+  }, 
+  "contact": {
+   "pastpart": "contacted", 
+   "prespart": "contacting", 
+   "tensed": {
+    "past": "contacted", 
+    "prespl": "contact", 
+    "pressg": "contacts"
+   }
+  }, 
+  "dance": {
+   "pastpart": "danced", 
+   "prespart": "dancing", 
+   "tensed": {
+    "past": "danced", 
+    "prespl": "dance", 
+    "pressg": "dances"
+   }
+  }, 
+  "doctor": {
+   "pl": "doctors", 
+   "sg": "doctor"
+  }, 
+  "follow": {
+   "pastpart": "followed", 
+   "prespart": "following", 
+   "tensed": {
+    "past": "followed", 
+    "prespl": "follow", 
+    "pressg": "follows"
+   }
+  }, 
+  "girl": {
+   "pl": "girls", 
+   "sg": "girl"
+  }, 
+  "hate": {
+   "pastpart": "hated", 
+   "prespart": "hating", 
+   "tensed": {
+    "past": "hated", 
+    "prespl": "hate", 
+    "pressg": "hates"
+   }
+  }, 
+  "help": {
+   "pastpart": "helped", 
+   "prespart": "helping", 
+   "tensed": {
+    "past": "helped", 
+    "prespl": "help", 
+    "pressg": "helps"
+   }
+  }, 
+  "hit": {
+   "pastpart": "hit", 
+   "prespart": "hitting", 
+   "tensed": {
+    "past": "hit", 
+    "prespl": "hit", 
+    "pressg": "hits"
+   }
+  }, 
+  "judge": {
+   "pl": "judges", 
+   "sg": "judge"
+  }, 
+  "lawyer": {
+   "pl": "lawyers", 
+   "sg": "lawyer"
+  }, 
+  "like": {
+   "pastpart": "liked", 
+   "prespart": "liking", 
+   "tensed": {
+    "past": "liked", 
+    "prespl": "like", 
+    "pressg": "likes"
+   }
+  }, 
+  "love": {
+   "pastpart": "loved", 
+   "prespart": "loving", 
+   "tensed": {
+    "past": "loved", 
+    "prespl": "love", 
+    "pressg": "loves"
+   }
+  }, 
+  "man": {
+   "pl": "men", 
+   "sg": "man"
+  }, 
+  "meet": {
+   "pastpart": "met", 
+   "prespart": "meeting", 
+   "tensed": {
+    "past": "met", 
+    "prespl": "meet", 
+    "pressg": "meets"
+   }
+  }, 
+  "observe": {
+   "pastpart": "observed", 
+   "prespart": "observing", 
+   "tensed": {
+    "past": "observed", 
+    "prespl": "observe", 
+    "pressg": "observes"
+   }
+  }, 
+  "officer": {
+   "pl": "officers", 
+   "sg": "officer"
+  }, 
+  "president": {
+   "pl": "presidents", 
+   "sg": "president"
+  }, 
+  "professor": {
+   "pl": "professors", 
+   "sg": "professor"
+  }, 
+  "recommend": {
+   "pastpart": "recommended", 
+   "prespart": "recommending", 
+   "tensed": {
+    "past": "recommended", 
+    "prespl": "recommend", 
+    "pressg": "recommends"
+   }
+  }, 
+  "resign": {
+   "pastpart": "resigned", 
+   "prespart": "resigning", 
+   "tensed": {
+    "past": "resigned", 
+    "prespl": "resign", 
+    "pressg": "resigns"
+   }
+  }, 
+  "run": {
+   "pastpart": "run", 
+   "prespart": "running", 
+   "tensed": {
+    "past": "ran", 
+    "prespl": "run", 
+    "pressg": "runs"
+   }
+  }, 
+  "scientist": {
+   "pl": "scientists", 
+   "sg": "scientist"
+  }, 
+  "secretary": {
+   "pl": "secretaries", 
+   "sg": "secretary"
+  }, 
+  "senator": {
+   "pl": "senators", 
+   "sg": "senator"
+  }, 
+  "shout": {
+   "pastpart": "shouted", 
+   "prespart": "shouting", 
+   "tensed": {
+    "past": "shouted", 
+    "prespl": "shout", 
+    "pressg": "shouts"
+   }
+  }, 
+  "sleep": {
+   "pastpart": "slept", 
+   "prespart": "sleeping", 
+   "tensed": {
+    "past": "slept", 
+    "prespl": "sleep", 
+    "pressg": "sleeps"
+   }
+  }, 
+  "student": {
+   "pl": "students", 
+   "sg": "student"
+  }, 
+  "support": {
+   "pastpart": "supported", 
+   "prespart": "supporting", 
+   "tensed": {
+    "past": "supported", 
+    "prespl": "support", 
+    "pressg": "supports"
+   }
+  }, 
+  "watch": {
+   "pastpart": "watched", 
+   "prespart": "watching", 
+   "tensed": {
+    "past": "watched", 
+    "prespl": "watch", 
+    "pressg": "watches"
+   }
+  }, 
+  "woman": {
+   "pl": "women", 
+   "sg": "woman"
+  }
+ }, 
+ "nouns": [
+  "professor", 
+  "student", 
+  "man", 
+  "woman", 
+  "president", 
+  "child", 
+  "girl", 
+  "boy", 
+  "judge", 
+  "senator", 
+  "secretary", 
+  "doctor", 
+  "lawyer", 
+  "scientist", 
+  "banker", 
+  "assistant", 
+  "officer"
+ ], 
+ "verbs": {
+  "intransitive": [
+   "sleep", 
+   "dance", 
+   "run", 
+   "shout", 
+   "resign"
+  ], 
+  "transitive": [
+   "recommend", 
+   "call", 
+   "follow", 
+   "help", 
+   "support", 
+   "watch", 
+   "contact", 
+   "hit", 
+   "meet", 
+   "hate", 
+   "like", 
+   "believe", 
+   "love", 
+   "observe", 
+   "avoid", 
+   "advise"
+  ]
+ }
+}
