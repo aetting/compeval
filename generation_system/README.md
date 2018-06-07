@@ -6,12 +6,12 @@ This is the code for the generation system described in Assessing Composition in
 
 ```
 @inproceedings{ettinger2018assessing,
-			 author = {Allyson Ettinger and Ahmed Elgohary and Colin Phillips and Philip Resnik},
-			 title = {Assessing Composition in Sentence Vector Representations},
-			 booktitle = {Proceedings of COLING},
-			 year = {2018},
-			}
-  ```
+  author = {Allyson Ettinger and Ahmed Elgohary and Colin Phillips and Philip Resnik},
+  title = {Assessing Composition in Sentence Vector Representations},
+  booktitle = {Proceedings of COLING},
+  year = {2018},
+ }
+```
 
 # Prerequisites
 
