@@ -3,10 +3,11 @@ import itertools
 import argparse
 import pickle
 import os
+import json
 from dataset_helpers import *
 from get_syntax import *
 from get_event_population import *
-from dataset_lexvars import *
+# from dataset_lexvars import *
 from dataset_dicts import *
 from dataset_events import *
 
@@ -202,7 +203,7 @@ def load_lexvars(lexvarfile):
         inflections = lexvars['inflections']
         nxlist = lexvars['nxlist']
 
-    return nouns,verbs,frames,inflections
+    return nouns,verbs,frames,inflections,nxlist
 
 
 def choose_rules(event,fixed_grammar_string,inflections):
@@ -281,11 +282,11 @@ def write_set(task,lab,task2inputs,mpo,setdir,lexvar_package,setID=None,outname=
                 numsent += 1
 
         out.write('\nNumber of sentences: %s\n'%str(numsent))
-        with open(os.path.join(setdir,'%s-dicts.pkl'%(setID)),'w') as dictfile: pickle.dump(id2ev,dictfile,pickle.HIGHEST_PROTOCOL)
+        with open(os.path.join(setdir,'%s-dicts.json'%(setID)),'w') as dictfile:
+            json.dump(id2ev,dictfile)
 
 if __name__ == "__main__":
     gram = import_grammar('grammar_feature')
-
     nouns,verbs,frames,inflections,nxlist = load_lexvars('dataset_lexvars.json')
 
 
