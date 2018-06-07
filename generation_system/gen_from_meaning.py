@@ -1,41 +1,47 @@
 import nltk
 import itertools
 import argparse
-import pickle
 import os
 import json
-from dataset_helpers import *
+import helper_dicts
+from gensys_helpers import *
 from get_syntax import *
 from get_event_population import *
-# from dataset_lexvars import *
-from dataset_dicts import *
-from dataset_events import *
 
-#takes NEEDED and PROHIBITED elements of meaning representation, both in event and list forms
+#takes NEEDED and PROHIBITED elements of meaning representation
 #produces structures that can hold it and runs function populating each of those structures in various ways
-def get_structures(task,needEvent,needList,avoidEvent,avoidList,lexvar_package,max_per_op=None,nx=False,dv=False):
+def get_structures(config,lexvar_package,max_per_op=None,nx=None,dv=False):
     frs = [k for k in verbs]
-    role_rc_structures = {}
+    role_rc_structures = config['role_rc_structures']
+    needEvent,needList,avoidEvent,avoidList = [config['constraints'][c] for c in ['needEv','needList','avoidEv','avoidList']]
+    # if needEventList and len(needEventList) > 1:
+    #     print('DEAL WITH THIS SITUATION')
+    # else: needEvent = needEventList
     #make sure frames are populated if names are specified in input events
     if needEvent:
+        needEvent = eventStart(needEvent)
         if needEvent.name and not needEvent.frame: needEvent.frame = frames[needEvent.name]
     if avoidEvent:
-        for avEv in avoidEvent:
-            if avEv.name and not avEv.frame: avEv.frame = frames[avEv.name]
+        avoidEvent = eventStart(avoidEvent)
+        if avoidEvent.name and not avoidEvent.frame: avoidEvent.frame = frames[avoidEvent.name]
 
     if avoidList:
-        for n in avoidList['noun']: nouns.remove(n)
-        for t in avoidList['transitive']: verbs['transitive'].remove(t)
-        for i in avoidList['intransitive']: verbs['intransitive'].remove(i)
+        if 'noun' in avoidList:
+            for n in avoidList['noun']: nouns.remove(n)
+        if 'transitive' in avoidList:
+            for t in avoidList['transitive']: verbs['transitive'].remove(t)
+        if 'intransitive' in avoidList:
+            for i in avoidList['intransitive']: verbs['intransitive'].remove(i)
 
-    if task in role_rc_structures_dict: role_rc_structures = role_rc_structures_dict[task]
-    else: role_rc_structures = role_rc_structures_dict['other']
 
     needsrc = {}
     if needEvent:
         for part in needEvent.participants:
             if 'rc' in needEvent.participants[part].attributes:
                 needsrc[part] = []
+                rcev = needEvent.participants[part].attributes['rc']['event']
+                if rcev.name and not rcev.frame:
+                    rcev.frame = frames[rcev.name]
                 if needEvent.participants[part].attributes['rc']['event'].frame:
                     needsrc[part].append(needEvent.participants[part].attributes['rc']['event'].frame)
                 else:
@@ -69,7 +75,7 @@ def get_structures(task,needEvent,needList,avoidEvent,avoidList,lexvar_package,m
                 for ev2,op,insertion,insertvoice in all_insertions(event_skel,op,needEvent,needList,avoidEvent,avoidList,max_per_op,mainok,lexvar_package,nx=nx,dv=dv):
                     yield ev2,op,relroles,insertion,insertvoice
 
-def all_insertions(event_skel,op,needEvent,needList,avoidEvent,avoidList,max_per_op,mainok,lexvar_package,nx=False,dv=False):
+def all_insertions(event_skel,op,needEvent,needList,avoidEvent,avoidList,max_per_op,mainok,lexvar_package,nx=None,dv=False):
 
     if len(needList) > 0: addfunc = populate_check_wadd
     else: addfunc = populate_check
@@ -143,7 +149,7 @@ def insert_into_main(op,empty_event,part_event):
                 relfr = frames[part_event.participants[role].attributes['rc']['event'].name]
             if relfr and relfr != rc_status:
                 use = 0
-                print('BREAKING BECAUSE RC MISMATCH')
+                print('RC MISMATCH')
                 break
     if use:
         event_structure.absorb(part_event)
@@ -164,9 +170,9 @@ def start_structured_event(op,f):
     #***currently randomly assigning relrole in rcs
     ev = eventStart({'frame':f})
     if f == 'transitive':
-        relroles = [o for o in itertools.product(roles[op['agent']],roles[op['patient']])]
+        relroles = [o for o in itertools.product(helper_dicts.roles[op['agent']],helper_dicts.roles[op['patient']])]
     else:
-        relroles = [tuple([r]) for r in roles[op['agent']]]
+        relroles = [tuple([r]) for r in helper_dicts.roles[op['agent']]]
 #     print relroles
 
     for config in relroles:
@@ -189,7 +195,7 @@ def start_structured_event(op,f):
 
 def finish_role_branches(event):
     frame = event.frame
-    for role in roles[frame]:
+    for role in helper_dicts.roles[frame]:
         if role not in event.participants:
             event.participants[role] = characterStart()
     return event
@@ -223,7 +229,7 @@ def choose_rules(event,fixed_grammar_string,inflections):
 
     #TODO see about converting to use role rather than rc_index to identify rc in grammar
     rc_index = 1
-    for role in roles[event.frame]:
+    for role in helper_dicts.roles[event.frame]:
         nps,rc_index,bindings = get_np_rules(role,event.participants[role],rc_index,bindings,inflections)
         grammar_string += nps
 
@@ -240,13 +246,10 @@ def choose_rules(event,fixed_grammar_string,inflections):
     return T
 
 
-def write_set(task,lab,task2inputs,mpo,setdir,lexvar_package,setID=None,outname=None,nx=False,dv=False):
+def write_set(setID,setdir,config,mpo,lexvar_package,nx=False,dv=False):
     # if not outname: outname = tasks[0]
 
-    if not setID:
-        fname = '%s_%s.txt'%(task,lab)
-        setID=task+lab
-    else: fname = setID + '.txt'
+    fname = setID + '.txt'
     with open(os.path.join(setdir,fname),'w') as out:
         op = None
         relroles = None
@@ -254,17 +257,14 @@ def write_set(task,lab,task2inputs,mpo,setdir,lexvar_package,setID=None,outname=
         insertvoice = None
         numsent = 0
         id2ev = {}
-        needEventList,needList,avoidEvent,avoidList = [task2inputs[task][lab][v] for v in ['needEv','needList','avoidEv','avoidList']]
-        if needEventList and len(needEventList) > 1:
-            print('DEAL WITH THIS SITUATION')
-        else: needEvent = needEventList
-        for ev,opNew,relrolesNew,insertionNew,insertvoiceNew, in get_structures(task,needEvent,needList,avoidEvent,avoidList,lexvar_package,max_per_op=mpo,nx=nx,dv=dv):
+
+        for ev,opNew,relrolesNew,insertionNew,insertvoiceNew, in get_structures(config,lexvar_package,max_per_op=mpo,nx=nx,dv=dv):
             if opNew != op or relrolesNew != relroles or insertionNew != insertion or insertvoiceNew != insertvoice:
                 op = opNew
                 relroles = relrolesNew
                 insertion = insertionNew
                 insertvoice = insertvoiceNew
-                out.write('\n' +str(op) + '\n' + str(relroles) + '\n' + '{%s}'%insertion + '\n' + '{%s}'%insertvoice)
+                out.write('\n## Relative clauses: ' +str(op) + '\n## RC roles: ' + str(relroles) + '\n## Event insertion: ' + '{%s}'%insertion + '\n## Insertion voice: ' + '{%s}'%insertvoice)
                 out.write('\n\n')
             if ev:
                 T = choose_rules(ev,gram,inflections)
@@ -287,30 +287,30 @@ def write_set(task,lab,task2inputs,mpo,setdir,lexvar_package,setID=None,outname=
 
 if __name__ == "__main__":
     gram = import_grammar('grammar_feature')
-    nouns,verbs,frames,inflections,nxlist = load_lexvars('dataset_lexvars.json')
+    nouns,verbs,frames,inflections,nxlist = load_lexvars('gensys_lexvars.json')
 
-    print("""------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------""")
-
-    #***TODO replace command line args with config file
     parser = argparse.ArgumentParser()
-    parser.add_argument('--task')
-    parser.add_argument('--lab')
-    parser.add_argument('--mpo',type=int,default=None)
     parser.add_argument('--setdir')
+    parser.add_argument('--setname')
+    parser.add_argument('--configfile')
+    parser.add_argument('--mpo',type=int,default=None)
+    parser.add_argument('--adv',type=int,default=None)
     args = parser.parse_args()
 
-    shuffle(nxlist)
-    bound = int(round(len(nxlist)*.6))
-    train_nx = nxlist[:bound]
-    test_nx = nxlist[bound:]
+    # shuffle(nxlist)
+    # bound = int(round(len(nxlist)*.6))
+    # train_nx = nxlist[:bound]
+    # test_nx = nxlist[bound:]
 
-    lexvar_package = (nouns,verbs,inflections,train_nx)
+    lexvar_package = (nouns,verbs,inflections,nxlist)
+
+    with open(args.configfile) as confFile:
+        config = json.load(confFile)
 
     # train_lexvar_package = (nouns,verbs,inflections,train_nx)
     # test_lexvar_package = (nouns,verbs,inflections,test_nx)
 
-    write_set(args.task,args.lab,task2inputs,args.mpo,args.setdir,lexvar_package,nx=False)
+    write_set(args.setname,args.setdir,config,args.mpo,lexvar_package,nx=args.adv)
     #
     # write_set(args.task,args.lab,task2inputs,args.mpo,args.setdir,train_lexvar_package,setID='neg_train',nx=True)
     # write_set(args.task,args.lab,task2inputs,args.mpo,args.setdir,test_lexvar_package,setID='neg_test',nx=True)

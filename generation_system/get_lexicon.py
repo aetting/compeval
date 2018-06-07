@@ -77,14 +77,14 @@ def get_inflections():
 
     return all_inflections,noun_inflections
 
-def get_lemmas():
+def get_lemmas(vocab):
     # read input file
     nouns = [] # for temporarily holding nouns
     trans = [] # temporary dictionaries to remove verbs with not full inflections
     intrans = []
     adverbs = None
 
-    with open('lexical/vocabulary.json', 'rU') as f:
+    with open(vocab, 'rU') as f:
         vocabdict = json.load(f)
         for word in vocabdict['intransitive']:
             intrans.append(word.strip())
@@ -97,9 +97,9 @@ def get_lemmas():
 
     return nouns,trans,intrans,adverbs
 
-def compile_vocab(out):
+def compile_vocab(vocab,out):
     all_inflections,noun_inflections = get_inflections()
-    nouns,trans,intrans,adverbs = get_lemmas()
+    nouns,trans,intrans,adverbs = get_lemmas(vocab)
 
     lexvars = {}
     remove = {'intrans':[],'trans':[],'noun':[]}
@@ -199,4 +199,4 @@ def compile_vocab(out):
 
 if __name__ == "__main__":
 
-    compile_vocab('dataset_lexvars.json')
+    compile_vocab('lexical/vocabulary.json','gensys_lexvars.json')

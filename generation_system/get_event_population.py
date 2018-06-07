@@ -3,19 +3,17 @@ from numpy.random import choice
 from copy import *
 import nltk, itertools, random
 from nltk.sem.logic import Variable
-# from dataset_lexvars import *
-from dataset_dicts import *
+import helper_dicts
 
-def populate_check(avoidEvent,needList,event,max_per_op,num_this_op,lexvar_package,nx=False,dv=False):
+def populate_check(avoidEvent,needList,event,max_per_op,num_this_op,lexvar_package,nx=None,dv=False):
     yielded = 0
     nouns,verbs,inflections,nxlist = lexvar_package
     for ev2 in populate_event(event,lexvar_package,nx=nx,dv=dv):
         # if outer_loop_iter > 2 and yielded == 0: break
         safe = 1
         if avoidEvent:
-            for avEv in avoidEvent:
-                if not ev2.check_event_to_avoid(avEv):
-                    safe = 0
+            if not ev2.check_event_to_avoid(avoidEvent):
+                safe = 0
 #                     print('DID NOT PASS')
         if safe:
             num_this_op += 1
@@ -24,7 +22,7 @@ def populate_check(avoidEvent,needList,event,max_per_op,num_this_op,lexvar_packa
         if max_per_op and (num_this_op >= max_per_op):
             break
 
-def populate_check_wadd(avoidEvent,needList,event,max_per_op,num_this_op,lexvar_package,nx=False,dv=False):
+def populate_check_wadd(avoidEvent,needList,event,max_per_op,num_this_op,lexvar_package,nx=None,dv=False):
     fullstop=False
     _,verbs,_,_ = lexvar_package
     for ev in add_mandatory_words(needList,event,verbs):
@@ -34,8 +32,7 @@ def populate_check_wadd(avoidEvent,needList,event,max_per_op,num_this_op,lexvar_
                 # break
             safe = 1
             if avoidEvent:
-                for avEv in avoidEvent:
-                    if not ev2.check_event_to_avoid(avEv): safe = 0
+                if not ev2.check_event_to_avoid(avoidEvent): safe = 0
             if safe:
                 num_this_op += 1
                 yielded += 1
@@ -46,7 +43,7 @@ def populate_check_wadd(avoidEvent,needList,event,max_per_op,num_this_op,lexvar_
         if fullstop: break
 
 #takes partially filled input event structure and iterates through available nouns and verbs to fill remaining slots
-def populate_event(event_orig,lexvar_package,nx=False,dv=False):
+def populate_event(event_orig,lexvar_package,nx=None,dv=False):
     #currently set so only one event is output for each original input frame (max_evs)
     nouns,verbs,inflections,nxlist = lexvar_package
     max_evs = None
@@ -68,7 +65,7 @@ def populate_event(event_orig,lexvar_package,nx=False,dv=False):
     i = 0
 
     if event_orig.voice: avail_voices = [event_orig.voice]
-    else: avail_voices = voices[event_orig.frame]
+    else: avail_voices = helper_dicts.voices[event_orig.frame]
     if event_orig.aspect: avail_aspects = [event_orig.aspect]
     else: avail_aspects = ['neut','prog']
     if event_orig.tense: avail_tenses = [event_orig.tense]
@@ -161,17 +158,17 @@ def fill_slots(event,slots,fillers):
                 subevent.participants[designation].attributes['rc']['event'].participants[r].name = fillers[i]
     return(event)
 
-def fill_details(event_input,nxlist,voice=None,nx=False,dv=False):
+def fill_details(event_input,nxlist,voice=None,nx=None,dv=False):
     event = deepcopy(event_input)
     if not event.tense: event.tense = choice(['past','pres'])
     if not event.aspect: event.aspect = choice(['prog','neut'],p=[.3,.7])
     if not event.voice:
         if voice: event.voice = voice
-        else: event.voice = choice(voices[event.frame])
+        else: event.voice = choice(helper_dicts.voices[event.frame])
     if not event.pol: event.pol = choice(['pos','neg'],p=[.8,.2])
     # if event.pol == 'neg' and nx and not event.polx:
     if nx and not event.polx:
-        num_extras = max(0,min(len(nxlist),int(round(1*np.random.randn()+1))))
+        num_extras = max(0,min(nx,int(round(1*np.random.randn()+1))))
         if num_extras > 0:
             advlist = copy(nxlist)
             random.shuffle(advlist)
@@ -186,7 +183,7 @@ def fill_details(event_input,nxlist,voice=None,nx=False,dv=False):
         if not event.participants[part].det:
             if dv:
                 predet = choice(['def','indef'])
-                event.participants[part].det = defnum2det[predet][event.participants[part].num]
+                event.participants[part].det = helper_dicts.defnum2det[predet][event.participants[part].num]
             else:
                 event.participants[part].det = 'the'
         event.bindings[Variable('?n%s'%part)] = event.participants[part].num
@@ -201,11 +198,11 @@ def fill_details(event_input,nxlist,voice=None,nx=False,dv=False):
                 #voice in RC is deterministic from hostrole and rtype, so set that here
                 chosen_role = event.participants[part].attributes['rc']['role']
                 chosen_rtype = event.participants[part].attributes['rc']['rtype']
-                event.participants[part].attributes['rc']['event'].voice = rolertype2voice[chosen_role][chosen_rtype]
+                event.participants[part].attributes['rc']['event'].voice = helper_dicts.rolertype2voice[chosen_role][chosen_rtype]
             elif not event.participants[part].attributes['rc']['rtype'] and event.participants[part].attributes['rc']['event'].voice:
                 chosen_role = event.participants[part].attributes['rc']['role']
                 chosen_voice = event.participants[part].attributes['rc']['event'].voice
-                event.participants[part].attributes['rc']['rtype'] = rolevoice2rtype[chosen_role][chosen_voice]
+                event.participants[part].attributes['rc']['rtype'] = helper_dicts.rolevoice2rtype[chosen_role][chosen_voice]
 
             rcevent = fill_details(event.participants[part].attributes['rc']['event'],nxlist,nx=nx,dv=dv)
             event.participants[part].attributes['rc']['event'] = rcevent
@@ -293,19 +290,34 @@ def add_mandatory_words(mand_words,event_orig,verbs):
 #     print events_to_fill
 #     print('\n')
     use = 1
-    n = len(mand_words['noun'])
-    tv = len(mand_words['transitive'])
-    iv = len(mand_words['intransitive'])
-    if len(parts_to_fill) < len(mand_words['noun']):
+    if 'noun' in mand_words:
+        n = len(mand_words['noun'])
+        mwn = mand_words['noun']
+    else:
+        n = 0
+        mwn = []
+    if 'transitive' in mand_words:
+        tv = len(mand_words['transitive'])
+        mwt = mand_words['transitive']
+    else:
+        tv = 0
+        mwt = []
+    if 'intransitive' in mand_words:
+        iv = len(mand_words['intransitive'])
+        mwi = mand_words['intransitive']
+    else:
+        iv = 0
+        mwi = []
+    if len(parts_to_fill) < len(mwn):
 #         print('NOUNS DID IT')
         use = 0
-    if len(events_to_fill['transitive']) < len(mand_words['transitive']):
+    if len(events_to_fill['transitive']) < len(mwt):
 #         print('TRANS DID IT')
         use = 0
-    if len(events_to_fill['intransitive']) < len(mand_words['intransitive']):
+    if len(events_to_fill['intransitive']) < len(mwi):
 #         print('INTRANS DID IT')
         use = 0
-    fillers = [mand_words['noun'],mand_words['transitive'],mand_words['intransitive']]
+    fillers = [mwn,mwt,mwi]
 #     Nperms = [n for n in itertools.product(mand_words['noun'],parts_to_fill)]
 #     Tperms = [t for t in itertools.product(mand_words['transitive'],events_to_fill['transitive'])]
 #     Iperms = [i for i in itertools.product(mand_words['intransitive'],events_to_fill['intransitive'])]

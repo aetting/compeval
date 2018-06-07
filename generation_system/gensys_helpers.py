@@ -11,7 +11,22 @@ class characterStart(object):
     def __init__(self,sdict={}):
         if 'name' in sdict: self.name = sdict['name']
         else: self.name = None
-        if 'attributes' in sdict: self.attributes = sdict['attributes']
+        if 'attributes' in sdict:
+            self.attributes = {}
+            for att in sdict['attributes']:
+                if att == 'rc':
+                    self.attributes['rc'] = {}
+                    if 'event' in sdict['attributes']['rc']:
+                        self.attributes['rc']['event'] = eventStart(sdict['attributes']['rc']['event'])
+                    else:
+                        self.attributes['rc']['event'] = {}
+                    for k in ['role','rtype']:
+                        if k in sdict['attributes']['rc']:
+                            self.attributes['rc'][k] = sdict['attributes']['rc'][k]
+                        else:
+                            self.attributes['rc'][k] = None
+                else:
+                    self.attributes[att] = sdict['attributes'][att]
         else: self.attributes = {}
         if 'num' in sdict: self.num = sdict['num']
         else: self.num = None
@@ -80,10 +95,12 @@ class eventStart(object):
     #hold event name and participants
     #participants can then hold their own information
     def __init__(self,sdict={}):
+        self.participants = {}
+        if 'participants' in sdict:
+            for part in sdict['participants']:
+                self.participants[part] = characterStart(sdict['participants'][part])
         if 'name' in sdict: self.name = sdict['name']
         else: self.name = None
-        if 'participants' in sdict: self.participants = sdict['participants']
-        else: self.participants = {}
         if 'frame' in sdict: self.frame = sdict['frame']
         else: self.frame = None
         if 'tense' in sdict: self.tense = sdict['tense']
