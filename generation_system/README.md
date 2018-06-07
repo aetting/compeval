@@ -19,21 +19,19 @@ This is the code for the generation system described in 'Assessing Composition i
 
 # Instructions
 
-## Config files
+## TL;DR
 
-Config files are used to specify a) the input constraints for the sentences to be generated, and b) possible structures for the sentences.
+You can generate sentences that will vary freely within the built-in system parameters using the command below
 
-The three example config files give some illustrations of how you can specify constraints.
+```
+python3 gen_from_meaning.py --setname sentences --setdir . --configfile config1.example.json --mpo 10
+```
 
-`config1.example.json` specifies no input constraints. Sentences can vary freely within the built-in parameters of the system.
+This will generate 10 sentences for each structural category that the system uses, and write them to `sentences.txt` in the `generation_system` directory.
 
-`config2.example.json` uses all of the categories of input constraint, to illustrate usage of each.
-* With `needEv`, it specifies an event that all sentences must include: in this case, an event with *lawyer* as AGENT of *recommend*. This is a JSON object.
-* With `avoidEv`, it specifies an event that no sentences can include: in this case, an event with *lawyer* as AGENT of *shout*. This is a JSON object.
-* With `needList`, it specifies lemmas that need to be present in every sentence. This is a JSON object with keys for 'noun','transitive' (verb), and 'intransitive' (verb), and arrays of lemmas as values.
-* With `avoidList`, it specifies lemmas that cannot be present in any sentence. This is a JSON object with keys for 'noun','transitive' (verb), and 'intransitive' (verb), and arrays of lemmas as values.
+## Specifying EVENT constraints
 
-`config3.example.json` demonstrates a more complex usage of `needEv` (this usage extends also to `avoidEv`).
+When using the `needEv` and `avoidEv` constraints in the config files, you will use EVENT objects. `config2.example.json` and `config3.example.json` give examples of using these objects to specify these constraints. EVENT objects allow specification of the following properties:
 
 EVENT objects can specify the following:
 * `name`: the lemma describing the event (verb)
@@ -52,6 +50,22 @@ The participant keys (`agent` or `patient`) map to CHARACTER objects, within whi
 The RC object can specify the following:
 * `rtype`: object-relative or subject-relative (`orc` or `src`)
 * `event`: the event described by the relative clause. The value here will be another EVENT object, as described above.
+
+## Config files
+
+Config files are used to specify a) the input constraints for the sentences to be generated, and b) possible structures for the sentences.
+
+The three example config files give some illustrations of how you can specify constraints.
+
+`config1.example.json` specifies no input constraints. Sentences can vary freely within the built-in parameters of the system.
+
+`config2.example.json` uses all of the categories of input constraint, to illustrate usage of each.
+* With `needEv`, it specifies an event that all sentences must include: in this case, an event with *lawyer* as AGENT of *recommend*. This is a JSON object.
+* With `avoidEv`, it specifies an event that no sentences can include: in this case, an event with *lawyer* as AGENT of *shout*. This is a JSON object.
+* With `needList`, it specifies lemmas that need to be present in every sentence. This is a JSON object with keys for 'noun','transitive' (verb), and 'intransitive' (verb), and arrays of lemmas as values.
+* With `avoidList`, it specifies lemmas that cannot be present in any sentence. This is a JSON object with keys for 'noun','transitive' (verb), and 'intransitive' (verb), and arrays of lemmas as values.
+
+`config3.example.json` demonstrates a more complex usage of the EVENT object in specifying the `needEv` constraint. In this case, the constraint specifies that
 
 
 ## Generating sentences

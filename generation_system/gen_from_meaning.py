@@ -282,7 +282,7 @@ def write_set(setID,setdir,config,mpo,lexvar_package,nx=False,dv=False):
                 numsent += 1
 
         out.write('\nNumber of sentences: %s\n'%str(numsent))
-        with open(os.path.join(setdir,'%s-dicts.json'%(setID)),'w') as dictfile:
+        with open(os.path.join(setdir,'%s-annot.json'%(setID)),'w') as dictfile:
             json.dump(id2ev,dictfile)
 
 if __name__ == "__main__":
