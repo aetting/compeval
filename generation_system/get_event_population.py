@@ -110,12 +110,12 @@ def decode(num,listlengths):
     inds = []
     for i,l in enumerate(listlengths):
         if i == 0:
-            ind = num/np.prod(listlengths[1:])
+            ind = num//np.prod(listlengths[1:])
             # permn_ind = num/(lt*li*lv*ltn*la*lp)
         elif i == len(listlengths) - 1:
             ind = num%listlengths[-1]
         else:
-            ind = (num%(np.prod(listlengths[i:])))/(np.prod(listlengths[i+1:]))
+            ind = (num%(np.prod(listlengths[i:])))//(np.prod(listlengths[i+1:]))
         inds.append(ind)
     return inds
 

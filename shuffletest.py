@@ -40,12 +40,11 @@ def decode(num,listlengths):
     inds = []
     for i,l in enumerate(listlengths):
         if i == 0:
-            ind = num/np.prod(listlengths[1:])
-            # permn_ind = num/(lt*li*lv*ltn*la*lp)
+            ind = num//np.prod(listlengths[1:])
         elif i == len(listlengths) - 1:
             ind = num%listlengths[-1]
         else:
-            ind = (num%(np.prod(listlengths[i:])))/(np.prod(listlengths[i+1:]))
+            ind = (num%(np.prod(listlengths[i:])))//(np.prod(listlengths[i+1:]))
         inds.append(ind)
     return inds
 
@@ -70,8 +69,8 @@ def get_rand_prod(lists,maxnum):
 if __name__ == "__main__":
     lists = [permns,permts,permis,voices,tenses,aspects,pols]
     # listlengths = [len(l) for l in lists]
-    for permn,permt,permi,voice,aspect,tense,pol in get_rand_prod(lists,5):
-
+    for permn,permt,permi,voice,aspect,tense,pol in get_rand_prod(lists,1):
+        pass
 
 
     # ind = 0

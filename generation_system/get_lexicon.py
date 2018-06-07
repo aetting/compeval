@@ -9,7 +9,7 @@ def get_inflections():
     inflections = {}
     nouns = []
 
-    f = gzip.open('lexical/morph_english.flat.gz', 'rU')
+    f = gzip.open('lexical/morph_english.flat.gz', 'rt')
 
     all_inflections = {}
     noun_inflections = {}
