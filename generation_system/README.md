@@ -79,7 +79,7 @@ These examples leave constant the `role_rc_structures` object, which lists the d
 
 `lexical/vocabulary.json` already contains a usable vocabulary (containing only human nouns and verbs that are compatible with human participants, to preserve plausibility).
 
-If you want to modify the vocabulary, you can modify `lexical/vocabulary.json` to reflect the lemmas that you want to use. The vocabulary object has four keys corresponding to lemma categories: nouns, transitive verbs, intransitive verbs, and adverbs. New vocabulary items must be placed in the array corresponding to the correct key, and must be lemmas (dictionary forms - e.g., 'sleep') and NOT inflected forms (e.g., 'sleeps').
+If you want to modify the vocabulary, you can do this by first modifying `lexical/vocabulary.json`. The vocabulary object in this file has four keys corresponding to lemma categories: nouns, transitive verbs, intransitive verbs, and adverbs. New vocabulary items must be placed in the array corresponding to the correct key, and must be lemmas (dictionary forms - e.g., 'sleep') and NOT inflected forms (e.g., 'sleeps').
 
 You can then build the lexical variables that the system will use by running `get_lexicon.py`.
 
@@ -87,6 +87,6 @@ You can then build the lexical variables that the system will use by running `ge
 python get_lexicon.py
 ```
 
-This will write a new `gensys_lexvars.json` with an inflection dictionary and other lexical variables for the system to use, based on the new vocabulary.
+This will read from `lexical/vocabulary.json` and write a new `gensys_lexvars.json` (which contains an inflection dictionary and other lexical variables for the system to use) based on the new vocabulary.
 
 `get_lexicon.py` uses the [XTAG morphology database](https://www.cis.upenn.edu/~xtag/swrelease.html) to look up inflections, and will remove any lemmas from the vocabulary that are missing inflections in that lookup.
