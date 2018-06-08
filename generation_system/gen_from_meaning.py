@@ -59,8 +59,6 @@ def get_structures(config,lexvar_package,max_per_op=None,nx=None,dv=False):
         #iterate over options within this frame
         for op in role_rc_structures[f]:
             skip_op = False
-            # print('\n')
-            # print(op)
             for role in op:
                 if role in needsrc and op[role] not in needsrc[role]:
                     skip_op = True
@@ -68,6 +66,8 @@ def get_structures(config,lexvar_package,max_per_op=None,nx=None,dv=False):
                 for role in needEvent.participants:
                     if role not in op:
                         skip_op = True
+            # print('\n')
+            # print(op)
             if skip_op:
                 continue
 #             for mainvoice in ['active','passive']:
