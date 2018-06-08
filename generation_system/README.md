@@ -50,7 +50,7 @@ EVENT objects can specify the following:
 
 The participant keys (`agent` or `patient`) map to CHARACTER objects, within which you can specify the following:
 * `name`: the lemma describing the participant (noun)
-* `num`: number of the event (`sg` or `pl`, e.g., 'student' vs 'students')
+* `num`: number of the participant (`sg` or `pl`, e.g., 'student' vs 'students')
 * `attributes`: attributes of the participant - another object. Currently the only supported attribute is a relative clause, the key for which is `rc`, and the value for which is another object.
 
 The RC object can specify the following:
