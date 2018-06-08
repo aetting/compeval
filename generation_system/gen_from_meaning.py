@@ -59,8 +59,8 @@ def get_structures(config,lexvar_package,max_per_op=None,nx=None,dv=False):
         #iterate over options within this frame
         for op in role_rc_structures[f]:
             skip_op = False
-            print('\n')
-            print(op)
+            # print('\n')
+            # print(op)
             for role in op:
                 if role in needsrc and op[role] not in needsrc[role]:
                     skip_op = True
@@ -269,7 +269,7 @@ def write_set(setID,setdir,config,mpo,lexvar_package,nx=False,dv=False):
             if ev:
                 T = choose_rules(ev,gram,inflections)
                 sent = ' '.join(T.leaves())
-                print(sent)
+                # print(sent)
                 sentID = setID + str(numsent)
                 out.write(sentID + '\t' + ' '.join(T.leaves()) + '\n')
                 sentdict = ev.todict(inflections)
