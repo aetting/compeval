@@ -1,0 +1,178 @@
+
+## Relative clauses: {'agent': 'none'}
+## RC roles: {'agent': 'none'}
+## Event insertion: {non-event}
+## Insertion voice: {None}
+
+sent0	the banker is not running
+sent1	the girls danced
+sent2	the judge was not resigning
+sent3	the scientists dance
+sent4	the girls are not resigning
+sent5	the assistant was not shouting
+sent6	the student was not shouting
+sent7	the professor ran
+sent8	the officer does not dance
+sent9	the men were not sleeping
+
+## Relative clauses: {'agent': 'transitive'}
+## RC roles: {'agent': 'patient'}
+## Event insertion: {non-event}
+## Insertion voice: {None}
+
+sent10	the child that was being loved by the judges did not resign
+sent11	the boys that were being hit by the bankers were dancing
+sent12	the girl that the scientist believes shouted
+sent13	the lawyers that are being observed by the doctor are not shouting
+sent14	the judge that was avoided by the lawyers was sleeping
+sent15	the senator that is observed by the men did not resign
+sent16	the child that the officer was not hating ran
+sent17	the boy that the men were recommending was not dancing
+sent18	the children that were avoided by the girls are sleeping
+sent19	the lawyers that are met by the girls were not shouting
+
+## Relative clauses: {'agent': 'transitive'}
+## RC roles: {'agent': 'agent'}
+## Event insertion: {non-event}
+## Insertion voice: {None}
+
+sent20	the secretaries that watched the lawyers shouted
+sent21	the child that helped the lawyer is not running
+sent22	the secretaries that do not advise the woman were not running
+sent23	the professor that contacted the judges resigns
+sent24	the scientist that met the men did not resign
+sent25	the men that did not hate the professors resign
+sent26	the judges that do not meet the girl run
+sent27	the doctors that advised the children are not resigning
+sent28	the girls that the man was not observed by slept
+sent29	the boys that loved the president shout
+
+## Relative clauses: {'agent': 'intransitive'}
+## RC roles: {'agent': 'agent'}
+## Event insertion: {non-event}
+## Insertion voice: {None}
+
+sent30	the senator that danced was shouting
+sent31	the boys that slept did not dance
+sent32	the doctors that do not shout dance
+sent33	the president that resigned is not dancing
+sent34	the officer that dances was resigning
+sent35	the professors that shouted were not running
+sent36	the secretaries that were running did not shout
+sent37	the girl that resigns does not run
+sent38	the lawyers that ran did not sleep
+sent39	the professors that did not sleep ran
+
+## Relative clauses: {'agent': 'none', 'patient': 'none'}
+## RC roles: {'agent': 'none', 'patient': 'none'}
+## Event insertion: {non-event}
+## Insertion voice: {None}
+
+sent40	the students do not recommend the senator
+sent41	the judge watched the women
+sent42	the student was watched by the officers
+sent43	the presidents did not help the man
+sent44	the child does not call the girl
+sent45	the bankers are hitting the students
+sent46	the lawyers are not loved by the doctor
+sent47	the children did not follow the boy
+sent48	the women are not advising the doctors
+sent49	the professor hates the students
+
+## Relative clauses: {'agent': 'none', 'patient': 'transitive'}
+## RC roles: {'agent': 'none', 'patient': 'patient'}
+## Event insertion: {non-event}
+## Insertion voice: {None}
+
+sent50	the officers were helping the scientists that the men contacted
+sent51	the girl that the assistants followed was not avoided by the child
+sent52	the judge that the president supports is not contacted by the lawyer
+sent53	the scientists that were being contacted by the secretary are being called by the banker
+sent54	the men are meeting the presidents that the woman believes
+sent55	the professor that was loved by the assistants is not being followed by the women
+sent56	the assistant that was not avoided by the lawyers was not hated by the presidents
+sent57	the banker was not hating the boy that the woman is recommending
+sent58	the presidents that are liked by the boys were not supported by the officer
+sent59	the boys were not observing the doctor that the girl did not contact
+
+## Relative clauses: {'agent': 'none', 'patient': 'transitive'}
+## RC roles: {'agent': 'none', 'patient': 'agent'}
+## Event insertion: {non-event}
+## Insertion voice: {None}
+
+sent60	the doctor is hitting the professors that loved the girls
+sent61	the professors do not meet the child that is contacting the doctor
+sent62	the woman that was watching the girl is met by the presidents
+sent63	the woman is not loving the banker that meets the students
+sent64	the scientist that did not hit the secretaries was not being called by the assistants
+sent65	the children did not advise the scientists that followed the presidents
+sent66	the secretary observes the senator that meets the boys
+sent67	the doctor that is meeting the children is not followed by the men
+sent68	the secretary was not helping the scientists that do not hate the boy
+sent69	the president observes the professor that the man was not watched by
+
+## Relative clauses: {'agent': 'none', 'patient': 'intransitive'}
+## RC roles: {'agent': 'none', 'patient': 'agent'}
+## Event insertion: {non-event}
+## Insertion voice: {None}
+
+sent70	the girls love the man that does not run
+sent71	the scientists are not meeting the doctors that sleep
+sent72	the judges are helping the boy that does not shout
+sent73	the boys avoid the woman that was dancing
+sent74	the banker does not support the student that did not sleep
+sent75	the judges that are not running are helped by the women
+sent76	the senator was not contacting the woman that danced
+sent77	the man loves the bankers that resigned
+sent78	the senators that were running were contacted by the boys
+sent79	the banker that danced was not being avoided by the officer
+
+## Relative clauses: {'agent': 'transitive', 'patient': 'none'}
+## RC roles: {'agent': 'patient', 'patient': 'none'}
+## Event insertion: {non-event}
+## Insertion voice: {None}
+
+sent80	the professors that are not being avoided by the senators were not watching the secretaries
+sent81	the secretary was not being supported by the officers that the president contacted
+sent82	the judges that the girl watched do not recommend the scientist
+sent83	the secretary was not being avoided by the scientists that were not supported by the officer
+sent84	the girl that the presidents believe supports the officers
+sent85	the officer that the judge hated is believing the senators
+sent86	the boy was believed by the secretary that is called by the girl
+sent87	the professors that the lawyer was not liking do not watch the presidents
+sent88	the girls are being hit by the officer that was not met by the scientist
+sent89	the presidents that the doctors recommended did not follow the boy
+
+## Relative clauses: {'agent': 'transitive', 'patient': 'none'}
+## RC roles: {'agent': 'agent', 'patient': 'none'}
+## Event insertion: {non-event}
+## Insertion voice: {None}
+
+sent90	the assistant is not being hated by the secretaries that do not love the doctors
+sent91	the secretary was not observed by the lawyer that advised the women
+sent92	the bankers that supported the man were contacting the scientist
+sent93	the boys that supported the senators do not hate the assistants
+sent94	the woman is not avoided by the doctors that are observing the judges
+sent95	the assistant that meets the doctors was not avoiding the child
+sent96	the boys that hate the senator like the girls
+sent97	the banker that supports the men recommends the child
+sent98	the secretary that observed the presidents did not advise the men
+sent99	the senators were not being believed by the women that were not liking the secretary
+
+## Relative clauses: {'agent': 'intransitive', 'patient': 'none'}
+## RC roles: {'agent': 'agent', 'patient': 'none'}
+## Event insertion: {non-event}
+## Insertion voice: {None}
+
+sent100	the secretaries are being avoided by the assistants that resigned
+sent101	the children were being believed by the presidents that are running
+sent102	the child that is resigning met the girl
+sent103	the assistant that was not resigning was not hating the scientists
+sent104	the doctors that are resigning are not believing the man
+sent105	the assistant that shouts avoided the child
+sent106	the bankers that dance are not avoiding the women
+sent107	the students were followed by the child that did not resign
+sent108	the senators are not liked by the secretaries that resign
+sent109	the women were not watched by the girl that was sleeping
+
+Number of sentences: 110

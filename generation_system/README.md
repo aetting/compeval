@@ -17,17 +17,23 @@ This is the code for the generation system described in 'Assessing Composition i
 * NumPy
 * NLTK
 
-# Instructions
-
-## TL;DR
+# Basic usage
 
 You can generate sentences that will vary freely within the built-in system parameters using the command below
 
 ```
-python3 gen_from_meaning.py --setname sentences --setdir . --configfile config1.example.json --mpo 10
+python3 gen_from_meaning.py --setname sent --setdir . --configfile config1.example.json --mpo 10
 ```
 
-This will generate 10 sentences for each structural category that the system uses, and write them to `sentences.txt` in the `generation_system` directory.
+This will generate 10 sentences for each structural category that the system uses, and write them to `sent.txt` in the `generation_system` directory, with annotation objects written to `sent-annot.json`.
+
+* `setname` is used in naming the output files and will also be used in sentence IDs
+* `setdir` specifies the location to write the output files
+* `configfile` specifies the config file, described in more detail below
+* `mpo` specifies the maximum number of sentences to be generated for a given structural category
+* `adv` you can also include this option with an integer argument, in which case the system will insert a variable number of adverbs before verbs (as long as your vocabulary includes adverbs), with the integer specifying the maximum number of adverbs to precede a given verb
+
+# Modifying config files
 
 ## Specifying EVENT constraints
 
@@ -51,7 +57,7 @@ The RC object can specify the following:
 * `rtype`: object-relative or subject-relative (`orc` or `src`)
 * `event`: the event described by the relative clause. The value here will be another EVENT object, as described above.
 
-## Config files
+## Config file examples
 
 Config files are used to specify a) the input constraints for the sentences to be generated, and b) possible structures for the sentences.
 
@@ -67,12 +73,7 @@ The three example config files give some illustrations of how you can specify co
 
 `config3.example.json` demonstrates a more complex usage of the EVENT object in specifying the `needEv` constraint. In this case, the constraint specifies that
 
-
-## Generating sentences
-
-python3 gen_from_meaning.py --setname xy --setdir ../../dataset/sets --configfile config2.example.json --mpo 5
-
-python gen_from_meaning.py --setname xy --setdir ../../dataset/sets --configfile config1.example.json --mpo 5 --adv 4
+These examples leave constant the `role_rc_structures` object, which lists the different possible structures that the sentences can be made up of. The structures listed in this object specify whether different participants have relative clauses, so for example `{"agent":"none","patient":"transitive"}` describes a sentence in which the agent has no relative clause attribute, and the patient has a transitive relative clause.
 
 ## Modifying vocabulary
 
