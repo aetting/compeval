@@ -75,7 +75,7 @@ The three example config files give some illustrations of how you can specify co
 
 These examples leave constant the `role_rc_structures` object, which lists the different possible structures that the sentences can be made up of. The structures listed in this object specify whether different participants have relative clauses, so for example `{"agent":"none","patient":"transitive"}` describes a sentence in which the agent has no relative clause attribute, and the patient has a transitive relative clause.
 
-## Modifying vocabulary
+# Modifying vocabulary
 
 `lexical/vocabulary.json` already contains a usable vocabulary (containing only human nouns and verbs that are compatible with human participants, to preserve plausibility).
 
