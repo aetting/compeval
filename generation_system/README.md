@@ -77,11 +77,11 @@ These examples leave constant the `role_rc_structures` object, which lists the d
 
 ## Modifying vocabulary
 
-You can modify the vocabulary that the system draws on in the following way.
+`lexical/vocabulary.json` already contains a usable vocabulary (containing only human nouns and verbs that are compatible with human participants, to preserve plausibility).
 
-Modify `lexical/vocabulary.json` to reflect the lemmas that you want to use. The lemmas are divided into three categories: nouns, transitive verbs, intransitive verbs, and adverbs. Be sure to put your new words in the correct category. Also ensure that you use lemmas (dictionary forms - e.g., 'sleep') and NOT inflected forms (e.g., 'sleeps'). The next step will get the inflections.
+If you want to modify the vocabulary, you can modify `lexical/vocabulary.json` to reflect the lemmas that you want to use. The vocabulary object has four keys corresponding to lemma categories: nouns, transitive verbs, intransitive verbs, and adverbs. New vocabulary items must be placed in the array corresponding to the correct key, and must be lemmas (dictionary forms - e.g., 'sleep') and NOT inflected forms (e.g., 'sleeps').
 
-Get the inflections and build the variables that the system will use by running `get_lexicon.py`.
+You can then build the lexical variables that the system will use by running `get_lexicon.py`.
 
 ```
 python get_lexicon.py
