@@ -22,7 +22,7 @@ This is the code for the generation system described in 'Assessing Composition i
 You can generate sentences that will vary freely within the built-in system parameters using the command below
 
 ```
-python3 gen_from_meaning.py --setname sent --setdir . --configfile config1.example.json --mpo 10
+python gen_from_meaning.py --setname sent --setdir . --configfile config1.example.json --mpo 10
 ```
 
 This will generate 10 sentences for each structural category that the system uses, and write them to `sent.txt` in the `generation_system` directory, with annotation objects written to `sent-annot.json`.
