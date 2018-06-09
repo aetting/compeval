@@ -297,11 +297,6 @@ if __name__ == "__main__":
     parser.add_argument('--adv',type=int,default=None)
     args = parser.parse_args()
 
-    # shuffle(nxlist)
-    # bound = int(round(len(nxlist)*.6))
-    # train_nx = nxlist[:bound]
-    # test_nx = nxlist[bound:]
-
     lexvar_package = (nouns,verbs,inflections,nxlist)
 
     with open(args.configfile) as confFile:
@@ -311,6 +306,3 @@ if __name__ == "__main__":
     # test_lexvar_package = (nouns,verbs,inflections,test_nx)
 
     write_set(args.setname,args.setdir,config,args.mpo,lexvar_package,nx=args.adv)
-    #
-    # write_set(args.task,args.lab,task2inputs,args.mpo,args.setdir,train_lexvar_package,setID='neg_train',nx=True)
-    # write_set(args.task,args.lab,task2inputs,args.mpo,args.setdir,test_lexvar_package,setID='neg_test',nx=True)
