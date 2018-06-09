@@ -158,6 +158,7 @@ def fill_slots(event,slots,fillers):
                 subevent.participants[designation].attributes['rc']['event'].participants[r].name = fillers[i]
     return(event)
 
+#populate unspecified properties
 def fill_details(event_input,nxlist,voice=None,nx=None,dv=False):
     event = deepcopy(event_input)
     if not event.tense: event.tense = choice(['past','pres'])
