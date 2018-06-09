@@ -77,10 +77,11 @@ def get_inflections():
 
     return all_inflections,noun_inflections
 
+#load vocab from file
 def get_lemmas(vocab):
     # read input file
-    nouns = [] # for temporarily holding nouns
-    trans = [] # temporary dictionaries to remove verbs with not full inflections
+    nouns = []
+    trans = []
     intrans = []
     adverbs = None
 
